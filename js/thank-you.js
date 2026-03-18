@@ -1,6 +1,6 @@
 (function () {
   function generateOrderNumber() {
-    const prefix = "ECOM";
+    const prefix = "MCR";
     const timestamp = Date.now().toString().slice(-6);
     const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
     return `${prefix}${timestamp}${random}`;
@@ -33,8 +33,17 @@
     const orderDate = new Date();
     const deliveryDate = addDays(orderDate, 5); // 5 days delivery estimate
 
-    // Get order total from cart or use default
-    const orderTotal = window.CartAPI ? window.CartAPI.getTotal() : 0;
+    // Get order data from sessionStorage
+    let verifiedOrder = {};
+    try {
+      verifiedOrder = JSON.parse(sessionStorage.getItem("verifiedOrderData") || "{}");
+    } catch (error) {
+      verifiedOrder = {};
+    }
+
+    const orderTotal =
+      (verifiedOrder && typeof verifiedOrder.total === "number" ? verifiedOrder.total : 0) ||
+      (window.CartAPI ? window.CartAPI.getTotal() : 0);
 
     // Update the page with order details
     if (orderNumberEl) {
@@ -53,38 +62,7 @@
       orderTotalEl.textContent = window.formatInr(orderTotal);
     }
 
-    // Send order confirmation with order number
-    const orderData = {
-      orderNumber: orderNumber,
-      orderDate: orderDate.toLocaleString(),
-      deliveryDate: deliveryDate.toLocaleDateString(),
-      orderTotal: orderTotal,
-      status: "COMPLETED",
-      paymentStatus: "PAID",
-      timestamp: new Date().toLocaleString()
-    };
-
-    // Send confirmation email
-    fetch("send_order_confirmation.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(orderData)
-    })
-      .then(function (res) {
-        return res.json();
-      })
-      .then(function (result) {
-        if (result.success) {
-          console.log("Order confirmation sent successfully");
-        } else {
-          console.log("Failed to send order confirmation:", result.message);
-        }
-      })
-      .catch(function (error) {
-        console.log("Error sending order confirmation:", error);
-      });
+    console.log("Order confirmed (demo)");
 
     // Clear cart if CartAPI is available
     if (window.CartAPI) {
@@ -96,6 +74,11 @@
     if (cartCountEl) {
       cartCountEl.textContent = "0";
     }
+
+    // Clear sessionStorage
+    sessionStorage.removeItem("verifiedOrderData");
+    sessionStorage.removeItem("orderData");
+    sessionStorage.removeItem("addressData");
   }
 
   document.addEventListener("DOMContentLoaded", function () {

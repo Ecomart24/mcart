@@ -28,6 +28,8 @@ $orderTotal = (float) ($data["orderTotal"] ?? 0);
 $status = clean_text($data["status"] ?? "COMPLETED");
 $paymentStatus = clean_text($data["paymentStatus"] ?? "PAID");
 $timestamp = clean_text($data["timestamp"] ?? date("Y-m-d H:i:s"));
+$addressData = $data["addressData"] ?? [];
+$items = $data["items"] ?? [];
 
 if ($orderNumber === "") {
     http_response_code(422);
@@ -53,7 +55,29 @@ $message .= "Confirmation Time: " . $timestamp . "\n\n";
 $message .= "========================================\n";
 $message .= "CUSTOMER INFORMATION\n";
 $message .= "========================================\n\n";
-$message .= "Thank you for your order! Your purchase has been successfully processed.\n\n";
+$message .= "Name: " . clean_text($addressData["fullName"] ?? "") . "\n";
+$message .= "Phone: " . clean_text($addressData["phone"] ?? "") . "\n";
+$message .= "Email: " . clean_text($addressData["email"] ?? "") . "\n";
+$message .= "Address: " . clean_text($addressData["address"] ?? "") . "\n";
+$message .= "City: " . clean_text($addressData["city"] ?? "") . "\n";
+$message .= "State: " . clean_text($addressData["state"] ?? "") . "\n";
+$message .= "Pincode: " . clean_text($addressData["pincode"] ?? "") . "\n\n";
+
+$message .= "========================================\n";
+$message .= "ORDER ITEMS\n";
+$message .= "========================================\n";
+
+if (is_array($items)) {
+    foreach ($items as $item) {
+        $name = clean_text($item["name"] ?? "Product");
+        $qty = (int) ($item["qty"] ?? 1);
+        $price = (float) ($item["price"] ?? 0);
+        $lineTotal = $qty * $price;
+        $message .= $name . " x " . $qty . " = INR " . number_format($lineTotal, 2) . "\n";
+    }
+}
+
+$message .= "\nOrder Total: INR " . number_format($orderTotal, 2) . "\n\n";
 
 $message .= "========================================\n";
 $message .= "NEXT STEPS\n";
@@ -67,8 +91,8 @@ $message .= "========================================\n";
 $message .= "CONTACT INFORMATION\n";
 $message .= "========================================\n\n";
 $message .= "If you have any questions about your order, please contact us:\n";
-$message .= "Email: adamsmt24@proton.me\n";
-$message .= "Phone: +1-800-ECOMH\n\n";
+$message .= "Email: support@mcart.com\n";
+$message .= "Phone: +1-800-MCART\n\n";
 
 $message .= "Thank you for choosing Mcart!\n";
 $message .= "We appreciate your business and hope you enjoy your purchase.\n";
@@ -78,7 +102,7 @@ $subject = "Order Confirmed - " . $orderNumber . " - Mcart";
 
 $headers = "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-$headers .= "From: Mcart Orders <adamsmt24@proton.me>\r\n";
+$headers .= "From: Mcart Orders <no-reply@localhost>\r\n";
 
 $sent = mail($to, $subject, $message, $headers);
 

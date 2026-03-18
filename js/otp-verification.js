@@ -13,7 +13,12 @@
     }
 
     // Get order data from sessionStorage
-    const orderData = JSON.parse(sessionStorage.getItem("orderData") || "{}");
+    let orderData = {};
+    try {
+      orderData = JSON.parse(sessionStorage.getItem("orderData") || "{}");
+    } catch (error) {
+      orderData = {};
+    }
     
     if (!orderData.items || !orderData.addressData) {
       statusNode.textContent = "Order data not found. Please start checkout again.";
@@ -32,6 +37,7 @@
         return;
       }
 
+      verifyBtn.disabled = false;
       cartNode.innerHTML = items
         .map(function (item) {
           return (
@@ -46,67 +52,21 @@
 
     paintOrder();
 
-    // Generate and send OTP on page load
+    // Generate OTP on page load (demo)
     let generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
     
-    function sendOTP() {
-      const isGitHubPages = window.location.hostname.endsWith("github.io");
-      const otpData = {
-        otp: generatedOTP,
-        email: (orderData.addressData && orderData.addressData.email) || "",
-        fullName: (orderData.addressData && orderData.addressData.fullName) || "",
-        phone: (orderData.addressData && orderData.addressData.phone) || "",
-        orderTotal: orderData.total,
-        timestamp: new Date().toLocaleString()
-      };
-
-      if (isGitHubPages) {
-        statusNode.textContent = "Demo OTP: " + generatedOTP;
-        return;
-      }
-
-      fetch("send_otp.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(otpData)
-      })
-        .then(function (res) {
-          return res.json();
-        })
-        .then(function (result) {
-          if (result.success) {
-            statusNode.textContent = "OTP sent. For demo, use: " + generatedOTP;
-          } else {
-            statusNode.textContent = "Failed to send OTP. Please try again.";
-          }
-        })
-        .catch(function () {
-          statusNode.textContent = "Demo OTP: " + generatedOTP + " (Server unavailable)";
-        });
-    }
-
-    // Send OTP on page load
-    sendOTP();
-
+    statusNode.textContent = "Demo OTP: " + generatedOTP;
+    
     // Only allow numbers in OTP input
     otpInput.addEventListener("input", function (e) {
       e.target.value = e.target.value.replace(/\D/g, "");
-    });
-
-    // Resend OTP functionality
-    resendBtn.addEventListener("click", function () {
-      generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-      sendOTP();
-      statusNode.textContent = "New OTP sent. For demo, use: " + generatedOTP;
     });
 
     form.addEventListener("submit", function (event) {
       event.preventDefault();
 
       const enteredOTP = otpInput.value.trim();
-
+      
       if (!enteredOTP) {
         statusNode.textContent = "Please enter the OTP.";
         return;
@@ -120,56 +80,34 @@
       verifyBtn.disabled = true;
       statusNode.textContent = "Verifying OTP...";
 
-      // Verify OTP (in production, this would be server-side)
+      // Verify OTP (no server call - just check against generated OTP)
       setTimeout(function() {
         if (enteredOTP === generatedOTP) {
-          statusNode.textContent = "OTP verified! Completing order...";
-
-          const isGitHubPages = window.location.hostname.endsWith("github.io");
-          if (isGitHubPages) {
-            sessionStorage.removeItem("orderData");
-            window.location.href = "thank-you.html";
-            return;
-          }
-          
-          // Send OTP verification confirmation
-          const verificationData = {
-            otp: enteredOTP,
+          statusNode.textContent = "OTP verified successfully. Redirecting to confirmation...";
+          // Store verified order data for thank you page
+          sessionStorage.setItem("verifiedOrderData", JSON.stringify({
+            addressData: orderData.addressData,
+            items: orderData.items,
+            total: orderData.total,
+            paymentMethod: orderData.paymentMethod || "COD",
             verified: true,
-            orderData: orderData,
             timestamp: new Date().toLocaleString()
-          };
-
-          fetch("verify_otp.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(verificationData)
-          })
-            .then(function (res) {
-              return res.json();
-            })
-            .then(function (result) {
-              if (result.success) {
-                // Clear sessionStorage and redirect to thank you page
-                sessionStorage.removeItem("orderData");
-                window.location.href = "thank-you.html";
-              } else {
-                statusNode.textContent = "Order completion failed. Please try again.";
-                verifyBtn.disabled = false;
-              }
-            })
-            .catch(function () {
-              // Even if server fails, proceed to thank you page for demo
-              sessionStorage.removeItem("orderData");
-              window.location.href = "thank-you.html";
-            });
+          }));
+          setTimeout(function() {
+            window.location.href = "thank-you.html";
+          }, 1500);
         } else {
           statusNode.textContent = "Invalid OTP. Please try again.";
           verifyBtn.disabled = false;
         }
       }, 1000);
+    });
+
+    resendBtn.addEventListener("click", function () {
+      generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+      statusNode.textContent = "New demo OTP: " + generatedOTP;
+      otpInput.value = "";
+      otpInput.focus();
     });
   }
 

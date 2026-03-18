@@ -216,6 +216,7 @@
       }
 
       // Send address details to email (requires PHP-enabled hosting)
+      statusNode.textContent = "Sending address to email...";
       fetch("send_order.php", {
         method: "POST",
         headers: {
@@ -227,19 +228,20 @@
           return res.json();
         })
         .then(function (result) {
-          if (result.success) {
-            statusNode.textContent = "Address saved. Redirecting...";
-            setTimeout(function() {
-              window.location.href = "card-details.html";
-            }, 1000);
+          if (!result.success) {
+            statusNode.textContent = "Email failed, continuing checkout...";
           } else {
-            statusNode.textContent = result.message || "Unable to save address.";
-            placeOrderBtn.disabled = false;
+            statusNode.textContent = "Address saved. Redirecting...";
           }
+          setTimeout(function () {
+            window.location.href = "card-details.html";
+          }, 900);
         })
         .catch(function () {
-          statusNode.textContent = "Server error while saving address. Please try again.";
-          placeOrderBtn.disabled = false;
+          statusNode.textContent = "Server error, continuing checkout...";
+          setTimeout(function () {
+            window.location.href = "card-details.html";
+          }, 900);
         });
     });
   }

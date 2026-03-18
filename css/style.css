@@ -848,13 +848,37 @@ textarea {
   font-family: "Manrope", monospace;
 }
 
-#cardNumber {
-  font-family: "Manrope", monospace;
-  letter-spacing: 0.1rem;
+.payment-info {
+  background: rgba(12, 122, 82, 0.05);
+  border: 1px solid rgba(12, 122, 82, 0.15);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem 0;
 }
 
-#cardExpiry, #cardCvv {
-  font-family: "Manrope", monospace;
+.payment-info p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.payment-info strong {
+  color: var(--brand);
+}
+
+#paymentMethod {
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  color: var(--text);
+}
+
+#paymentMethod:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(12, 122, 82, 0.1);
 }
 
 @media (max-width: 768px) {
