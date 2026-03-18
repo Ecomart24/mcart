@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mcart | OTP Verification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="site-bg"></div>
+
+  <header class="topbar">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Mcart</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="checkout.html">Checkout</a>
+      </nav>
+      <button class="cart-icon-btn" type="button" data-open-cart>
+        Cart <span class="cart-count" data-cart-count>0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <h1>OTP Verification</h1>
+    <div class="checkout-layout">
+      <form id="otp-form" class="panel">
+        <h2>Enter OTP</h2>
+        <p class="otp-instruction">A 6-digit OTP has been sent to your email. Please enter it below to complete your order.</p>
+
+        <label for="otp">One-Time Password</label>
+        <input id="otp" name="otp" type="text" required placeholder="Enter 6-digit OTP" maxlength="6" pattern="[0-9]{6}" />
+
+        <div class="otp-actions">
+          <button class="btn btn-primary full" id="verify-otp-btn" type="submit">Verify & Complete Order</button>
+          <button class="btn btn-ghost full" id="resend-otp-btn" type="button">Resend OTP</button>
+        </div>
+
+        <p class="status-msg" id="otp-status"></p>
+      </form>
+
+      <aside class="panel">
+        <h2>Your Order</h2>
+        <div id="checkout-cart-items"></div>
+        <div class="checkout-total-row">
+          <span>Total</span>
+          <strong id="checkout-total">INR 0</strong>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-row">
+      <p>Secure checkout by Mcart.</p>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" data-close-cart></div>
+  <aside class="cart-drawer" aria-label="Shopping cart">
+    <div class="cart-drawer-head">
+      <h3>Your Cart</h3>
+      <button type="button" data-close-cart aria-label="Close cart">x</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-drawer-foot">
+      <p>Total: <strong id="cart-total">INR 0</strong></p>
+      <button class="btn btn-primary full" type="button" data-checkout-link>Go To Checkout</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/otp-verification.js"></script>
+</body>
+</html>

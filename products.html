@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mcart | All Products</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="site-bg"></div>
+
+  <header class="topbar">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Mcart</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="products.html" class="is-active">Products</a>
+        <a href="checkout.html">Checkout</a>
+      </nav>
+      <button class="cart-icon-btn" type="button" data-open-cart>
+        Cart <span class="cart-count" data-cart-count>0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="section-head">
+      <h1>All Products</h1>
+    </div>
+    <div class="product-grid" data-products-grid></div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-row">
+      <p>Shop better with Mcart.</p>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" data-close-cart></div>
+  <aside class="cart-drawer" aria-label="Shopping cart">
+    <div class="cart-drawer-head">
+      <h3>Your Cart</h3>
+      <button type="button" data-close-cart aria-label="Close cart">x</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-drawer-foot">
+      <p>Total: <strong id="cart-total">INR 0</strong></p>
+      <button class="btn btn-primary full" type="button" data-checkout-link>Go To Checkout</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

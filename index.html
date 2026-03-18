@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mcart | Modern Shopping</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="site-bg"></div>
+
+  <header class="topbar">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Mcart</a>
+      <nav class="nav-links">
+        <a href="index.html" class="is-active">Home</a>
+        <a href="products.html">Products</a>
+        <a href="checkout.html">Checkout</a>
+      </nav>
+      <button class="cart-icon-btn" type="button" data-open-cart>
+        Cart <span class="cart-count" data-cart-count>0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="hero-text">
+        <p class="kicker">Fresh Arrivals</p>
+        <h1>Modern e-commerce shopping with quick checkout.</h1>
+        <p>Discover stylish products, explore details, and place your order in minutes.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="products.html">Shop All Products</a>
+          <a class="btn btn-ghost" href="#featured">Featured Picks</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80" alt="Featured watch product" />
+      </div>
+    </section>
+
+    <section id="featured" class="container section">
+      <div class="section-head">
+        <h2>Featured Products</h2>
+        <a href="products.html">View all</a>
+      </div>
+      <div class="product-grid" data-featured-products></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-row">
+      <p>2026 Mcart. Built with HTML, CSS, JavaScript and PHP.</p>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" data-close-cart></div>
+  <aside class="cart-drawer" aria-label="Shopping cart">
+    <div class="cart-drawer-head">
+      <h3>Your Cart</h3>
+      <button type="button" data-close-cart aria-label="Close cart">x</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-drawer-foot">
+      <p>Total: <strong id="cart-total">INR 0</strong></p>
+      <button class="btn btn-primary full" type="button" data-checkout-link>Go To Checkout</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

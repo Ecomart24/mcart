@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mcart | Order Confirmation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="site-bg"></div>
+
+  <header class="topbar">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Mcart</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="checkout.html">Checkout</a>
+      </nav>
+      <button class="cart-icon-btn" type="button" data-open-cart>
+        Cart <span class="cart-count" data-cart-count>0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="thank-you-container">
+      <div class="success-icon">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+      
+      <h1>Thank You for Your Order!</h1>
+      <p class="order-confirmation">Your order has been successfully placed and confirmed.</p>
+      
+      <div class="order-details-card">
+        <h2>Order Details</h2>
+        <div class="order-number-section">
+          <label>Order Number</label>
+          <div class="order-number" id="order-number">Generating...</div>
+        </div>
+        
+        <div class="order-info-grid">
+          <div class="info-item">
+            <label>Order Date</label>
+            <span id="order-date">-</span>
+          </div>
+          <div class="info-item">
+            <label>Payment Status</label>
+            <span class="status-success">Paid</span>
+          </div>
+          <div class="info-item">
+            <label>Estimated Delivery</label>
+            <span id="delivery-date">-</span>
+          </div>
+          <div class="info-item">
+            <label>Order Total</label>
+            <span id="order-total" class="total-amount">-</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="next-steps">
+        <h3>What's Next?</h3>
+        <ul>
+          <li>You'll receive an order confirmation email shortly</li>
+          <li>Your order will be processed within 24 hours</li>
+          <li>You'll receive tracking information once shipped</li>
+        </ul>
+      </div>
+
+      <div class="action-buttons">
+        <a href="index.html" class="btn btn-primary">Continue Shopping</a>
+        <a href="products.html" class="btn btn-ghost">Browse More Products</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-row">
+      <p>Thank you for shopping with Mcart. Your satisfaction is our priority!</p>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" data-close-cart></div>
+  <aside class="cart-drawer" aria-label="Shopping cart">
+    <div class="cart-drawer-head">
+      <h3>Your Cart</h3>
+      <button type="button" data-close-cart aria-label="Close cart">x</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-drawer-foot">
+      <p>Total: <strong id="cart-total">INR 0</strong></p>
+      <button class="btn btn-primary full" type="button" data-checkout-link>Go To Checkout</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/thank-you.js"></script>
+</body>
+</html>
