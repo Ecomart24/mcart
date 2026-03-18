@@ -202,15 +202,15 @@
       sessionStorage.setItem("addressData", JSON.stringify(addressData));
 
       placeOrderBtn.disabled = true;
-      statusNode.textContent = "Placing your order...";
+      statusNode.textContent = "Saving address...";
 
       // GitHub Pages is static hosting and cannot execute PHP endpoints.
       // For a live store, host the PHP files on a PHP-enabled server.
       const isGitHubPages = window.location.hostname.endsWith("github.io");
       if (isGitHubPages) {
-        statusNode.textContent = "GitHub Pages cannot process orders (PHP not supported). Redirecting to confirmation...";
+        statusNode.textContent = "Address saved (demo on GitHub Pages). Redirecting...";
         setTimeout(function () {
-          window.location.href = "thank-you.html";
+          window.location.href = "card-details.html";
         }, 900);
         return;
       }
@@ -228,17 +228,17 @@
         })
         .then(function (result) {
           if (result.success) {
-            statusNode.textContent = "Order placed. Redirecting to confirmation...";
+            statusNode.textContent = "Address saved. Redirecting...";
             setTimeout(function() {
-              window.location.href = "thank-you.html";
+              window.location.href = "card-details.html";
             }, 1000);
           } else {
-            statusNode.textContent = result.message || "Unable to place order.";
+            statusNode.textContent = result.message || "Unable to save address.";
             placeOrderBtn.disabled = false;
           }
         })
         .catch(function () {
-          statusNode.textContent = "Server error while placing order. Please try again.";
+          statusNode.textContent = "Server error while saving address. Please try again.";
           placeOrderBtn.disabled = false;
         });
     });

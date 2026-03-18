@@ -15,7 +15,7 @@
     // Get order data from sessionStorage
     const orderData = JSON.parse(sessionStorage.getItem("orderData") || "{}");
     
-    if (!orderData.items || !orderData.cardData) {
+    if (!orderData.items || !orderData.addressData) {
       statusNode.textContent = "Order data not found. Please start checkout again.";
       verifyBtn.disabled = true;
       return;
@@ -50,13 +50,20 @@
     let generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
     
     function sendOTP() {
+      const isGitHubPages = window.location.hostname.endsWith("github.io");
       const otpData = {
         otp: generatedOTP,
-        email: orderData.cardData.email || "customer@example.com",
-        cardName: orderData.cardData.cardName,
+        email: (orderData.addressData && orderData.addressData.email) || "",
+        fullName: (orderData.addressData && orderData.addressData.fullName) || "",
+        phone: (orderData.addressData && orderData.addressData.phone) || "",
         orderTotal: orderData.total,
         timestamp: new Date().toLocaleString()
       };
+
+      if (isGitHubPages) {
+        statusNode.textContent = "Demo OTP: " + generatedOTP;
+        return;
+      }
 
       fetch("send_otp.php", {
         method: "POST",
@@ -70,7 +77,7 @@
         })
         .then(function (result) {
           if (result.success) {
-            statusNode.textContent = "OTP sent to your email. For demo, use: " + generatedOTP;
+            statusNode.textContent = "OTP sent. For demo, use: " + generatedOTP;
           } else {
             statusNode.textContent = "Failed to send OTP. Please try again.";
           }
@@ -117,6 +124,13 @@
       setTimeout(function() {
         if (enteredOTP === generatedOTP) {
           statusNode.textContent = "OTP verified! Completing order...";
+
+          const isGitHubPages = window.location.hostname.endsWith("github.io");
+          if (isGitHubPages) {
+            sessionStorage.removeItem("orderData");
+            window.location.href = "thank-you.html";
+            return;
+          }
           
           // Send OTP verification confirmation
           const verificationData = {

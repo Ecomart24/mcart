@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mcart | Card Details</title>
+  <title>Mcart | Order Details</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -27,30 +27,23 @@
   </header>
 
   <main class="container section">
-    <h1>Payment Details</h1>
+    <h1>Order Details</h1>
     <div class="checkout-layout">
-      <form id="card-form" class="panel">
-        <h2>Card Information</h2>
+      <form id="details-form" class="panel">
+        <h2>Review & Verify</h2>
+        <p class="card-desc">Confirm your delivery address and choose a payment method. Then we will verify with OTP.</p>
 
-        <label for="cardName">Name on Card</label>
-        <input id="cardName" name="cardName" type="text" required placeholder="John Doe" />
+        <div id="address-summary"></div>
 
-        <label for="cardNumber">Card Number</label>
-        <input id="cardNumber" name="cardNumber" type="text" required placeholder="1234 5678 9012 3456" maxlength="19" />
+        <label for="paymentMethod">Payment Method</label>
+        <select id="paymentMethod" name="paymentMethod" required>
+          <option value="COD">Cash on Delivery (Recommended)</option>
+          <option value="UPI">UPI (Demo)</option>
+          <option value="CARD">Card (Demo)</option>
+        </select>
 
-        <div class="two-col">
-          <div>
-            <label for="cardExpiry">Expiry Date</label>
-            <input id="cardExpiry" name="cardExpiry" type="text" required placeholder="MM/YY" maxlength="5" />
-          </div>
-          <div>
-            <label for="cardCvv">CVV</label>
-            <input id="cardCvv" name="cardCvv" type="text" required placeholder="123" maxlength="4" />
-          </div>
-        </div>
-
-        <button class="btn btn-primary full" id="proceed-to-otp-btn" type="submit">Proceed to OTP</button>
-        <p class="status-msg" id="card-status"></p>
+        <button class="btn btn-primary full" id="proceed-to-otp-btn" type="submit">Continue to OTP</button>
+        <p class="status-msg" id="details-status"></p>
       </form>
 
       <aside class="panel">
