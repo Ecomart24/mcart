@@ -140,24 +140,46 @@
       return;
     }
 
+    // We handle validation and messaging ourselves for a smoother demo flow.
+    form.noValidate = true;
+
+    function getCartItemsSafe() {
+      return window.CartAPI && typeof window.CartAPI.getItems === "function"
+        ? window.CartAPI.getItems()
+        : [];
+    }
+
+    function getCartTotalSafe() {
+      return window.CartAPI && typeof window.CartAPI.getTotal === "function"
+        ? window.CartAPI.getTotal()
+        : 0;
+    }
+
     function paintOrder() {
-      const items = window.CartAPI.getItems();
-      const total = window.CartAPI.getTotal();
-      totalNode.textContent = window.formatInr(total);
+      const items = getCartItemsSafe();
+      const total = getCartTotalSafe();
+      totalNode.textContent = window.formatInr ? window.formatInr(total) : "INR " + total;
 
       if (!items.length) {
         cartNode.innerHTML = '<p class="empty-note">No products in cart.</p>';
-        placeOrderBtn.disabled = true;
+        // Keep the button enabled so we can show a clear message on submit.
+        placeOrderBtn.disabled = false;
+        if (statusNode) {
+          statusNode.textContent = "Your cart is empty. Please add products first.";
+        }
         return;
       }
 
       placeOrderBtn.disabled = false;
+      if (statusNode) {
+        statusNode.textContent = "";
+      }
       cartNode.innerHTML = items
         .map(function (item) {
           return (
             '<div class="checkout-item">' +
             "<span>" + item.name + " x " + item.qty + "</span>" +
-            "<strong>" + window.formatInr(item.price * item.qty) + "</strong>" +
+            "<strong>" + (window.formatInr ? window.formatInr(item.price * item.qty) : "INR " + item.price * item.qty) + "</strong>" +
             "</div>"
           );
         })
@@ -178,31 +200,35 @@
     form.addEventListener("submit", function (event) {
       event.preventDefault();
 
-      const items = window.CartAPI.getItems();
+      const items = getCartItemsSafe();
       if (!items.length) {
-        statusNode.textContent = "Your cart is empty.";
+        if (statusNode) {
+          statusNode.textContent = "Your cart is empty. Please add products first.";
+        }
         return;
       }
 
       // Validate required fields
-      const address = form.address.value.trim();
+      const address = form.address ? form.address.value.trim() : "";
 
       if (!address) {
-        statusNode.textContent = "Please fill in all required fields.";
+        if (statusNode) {
+          statusNode.textContent = "Please enter your address.";
+        }
         return;
       }
 
       // Store address details in sessionStorage for next steps
       const addressData = {
         address: address,
-        city: form.city.value.trim(),
-        state: form.state.value.trim(),
+        city: form.city ? form.city.value.trim() : "",
+        state: form.state ? form.state.value.trim() : "",
         pincode: String(form.pincode ? form.pincode.value : "")
           .trim()
           .replace(/\D/g, "")
           .slice(0, 6),
         cartItems: items,
-        orderTotal: window.CartAPI.getTotal(),
+        orderTotal: getCartTotalSafe(),
         placedAt: new Date().toLocaleString()
       };
 
