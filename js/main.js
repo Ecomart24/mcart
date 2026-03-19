@@ -166,6 +166,15 @@
 
     paintOrder();
 
+    const pincodeInput = form.querySelector("#pincode");
+    if (pincodeInput) {
+      pincodeInput.addEventListener("input", function (e) {
+        e.target.value = String(e.target.value || "")
+          .replace(/\D/g, "")
+          .slice(0, 6);
+      });
+    }
+
     form.addEventListener("submit", function (event) {
       event.preventDefault();
 
@@ -188,7 +197,10 @@
         address: address,
         city: form.city.value.trim(),
         state: form.state.value.trim(),
-        pincode: form.pincode.value.trim(),
+        pincode: String(form.pincode ? form.pincode.value : "")
+          .trim()
+          .replace(/\D/g, "")
+          .slice(0, 6),
         cartItems: items,
         orderTotal: window.CartAPI.getTotal(),
         placedAt: new Date().toLocaleString()

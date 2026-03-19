@@ -48,7 +48,7 @@
         </div>
 
         <label for="pincode">Pincode</label>
-        <input id="pincode" name="pincode" type="text" />
+        <input id="pincode" name="pincode" type="text" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="6-digit pincode" />
 
         <button class="btn btn-primary full" id="place-order-btn" type="submit">Continue to Details</button>
         <p class="status-msg" id="checkout-status"></p>
