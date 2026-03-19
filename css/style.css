@@ -537,6 +537,16 @@ textarea {
   min-height: 1.4em;
 }
 
+.status-msg a {
+  color: var(--brand-dark);
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.status-msg a:hover {
+  color: var(--brand);
+}
+
 .address-box {
   border: 1px solid var(--line);
   border-radius: 14px;

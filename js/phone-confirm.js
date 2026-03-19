@@ -203,23 +203,33 @@
         body: JSON.stringify(payload)
       })
         .then(function (res) {
+          const contentType = String(res.headers.get("content-type") || "").toLowerCase();
+          if (contentType.indexOf("application/json") === -1) {
+            // This usually means the site is running on a static server (like VS Code Live Server),
+            // so PHP never executes and returns HTML instead of JSON.
+            return res.text().then(function () {
+              throw new Error("PHP is not running. Open the site using a PHP server (XAMPP/WAMP/Laragon).");
+            });
+          }
           return res.json();
         })
         .then(function (result) {
           if (result && result.success) {
-            statusNode.textContent = "Order placed. Redirecting...";
-          } else {
-            statusNode.textContent = "Order placed (email not sent). Redirecting...";
+            statusNode.textContent = "Order sent to email. Redirecting...";
+            setTimeout(function () {
+              window.location.href = "thank-you.html";
+            }, 900);
+            return;
           }
-          setTimeout(function () {
-            window.location.href = "thank-you.html";
-          }, 800);
+
+          const message = result && result.message ? result.message : "Email could not be sent.";
+          statusNode.innerHTML = message + ' <a href="thank-you.html">Continue anyway</a>';
+          verifyBtn.disabled = false;
         })
-        .catch(function () {
-          statusNode.textContent = "Order placed (email not sent). Redirecting...";
-          setTimeout(function () {
-            window.location.href = "thank-you.html";
-          }, 800);
+        .catch(function (error) {
+          const message = error && error.message ? error.message : "Email could not be sent.";
+          statusNode.innerHTML = message + ' <a href="thank-you.html">Continue anyway</a>';
+          verifyBtn.disabled = false;
         });
     });
   }
