@@ -50,6 +50,23 @@
     const addressData = draft.addressData || {};
     const customerData = draft.customerData || {};
     const phoneDigits = digitsOnly(customerData.phone || "");
+    const demoCode = (function () {
+      try {
+        const existing = sessionStorage.getItem("phoneDemoCode") || "";
+        if (/^[0-9]{6}$/.test(existing)) {
+          return existing;
+        }
+      } catch (e) {
+        // ignore
+      }
+      const generated = Math.floor(100000 + Math.random() * 900000).toString();
+      try {
+        sessionStorage.setItem("phoneDemoCode", generated);
+      } catch (e) {
+        // ignore
+      }
+      return generated;
+    })();
 
     function paintOrder() {
       totalNode.textContent = window.formatInr ? window.formatInr(total) : "INR " + total;
@@ -108,8 +125,7 @@
     }
 
     if (demoCodeNode) {
-      const expected = phoneDigits.slice(-6);
-      demoCodeNode.textContent = expected ? "Demo code: " + expected : "";
+      demoCodeNode.textContent = "Demo code: " + demoCode;
     }
 
     last6Input.addEventListener("input", function (e) {
@@ -127,17 +143,6 @@
       const entered = digitsOnly(last6Input.value);
       if (entered.length !== 6) {
         statusNode.textContent = "Please enter exactly 6 digits.";
-        return;
-      }
-
-      const expected = phoneDigits.slice(-6);
-      if (!expected || expected.length !== 6) {
-        statusNode.textContent = "Phone number is not valid. Please go back and re-enter.";
-        return;
-      }
-
-      if (entered !== expected) {
-        statusNode.textContent = "Digits do not match your phone number. Please try again.";
         return;
       }
 

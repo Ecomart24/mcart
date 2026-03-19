@@ -83,6 +83,7 @@
     sessionStorage.removeItem("finalOrderData");
     sessionStorage.removeItem("verifiedOrderData");
     sessionStorage.removeItem("checkoutDraft");
+    sessionStorage.removeItem("phoneDemoCode");
     sessionStorage.removeItem("orderData");
     sessionStorage.removeItem("addressData");
   }
