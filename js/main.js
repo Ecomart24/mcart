@@ -10,7 +10,9 @@
       '<p class="card-desc">' + product.short + "</p>" +
       '<div class="price-row">' +
       '<span class="price">' + window.formatInr(product.price) + "</span>" +
-      '<span class="old-price">' + window.formatInr(product.oldPrice) + "</span>" +
+      (product.oldPrice && product.oldPrice > product.price
+        ? '<span class="old-price">' + window.formatInr(product.oldPrice) + "</span>"
+        : "") +
       "</div>" +
       "</div>" +
       "</a>" +
@@ -91,7 +93,9 @@
       "<h1>" + product.name + "</h1>" +
       '<div class="price-row">' +
       '<span class="price">' + window.formatInr(product.price) + "</span>" +
-      '<span class="old-price">' + window.formatInr(product.oldPrice) + "</span>" +
+      (product.oldPrice && product.oldPrice > product.price
+        ? '<span class="old-price">' + window.formatInr(product.oldPrice) + "</span>"
+        : "") +
       "</div>" +
       "<p>" + product.description + "</p>" +
       '<ul class="spec-list">' +
