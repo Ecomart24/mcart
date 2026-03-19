@@ -902,6 +902,18 @@ textarea {
   font-size: 0.95rem;
 }
 
+.demo-code {
+  display: inline-block;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(12, 122, 82, 0.25);
+  background: rgba(12, 122, 82, 0.08);
+  color: var(--brand-dark);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.5rem;
+}
+
 .otp-actions {
   display: flex;
   flex-direction: column;

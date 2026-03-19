@@ -20,6 +20,7 @@
     const verifyBtn = document.getElementById("verify-phone-btn");
     const last6Input = document.getElementById("last6");
     const summaryNode = document.getElementById("verify-summary");
+    const demoCodeNode = document.getElementById("demo-code");
 
     if (!cartNode || !totalNode || !form || !statusNode || !verifyBtn || !last6Input) {
       return;
@@ -104,6 +105,11 @@
         statusNode.textContent = "Address not found. Please go back and enter your address.";
         verifyBtn.disabled = true;
       }
+    }
+
+    if (demoCodeNode) {
+      const expected = phoneDigits.slice(-6);
+      demoCodeNode.textContent = expected ? "Demo code: " + expected : "";
     }
 
     last6Input.addEventListener("input", function (e) {
@@ -217,4 +223,3 @@
     renderPhoneConfirmPage();
   });
 })();
-
