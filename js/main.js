@@ -197,6 +197,15 @@
       });
     }
 
+    const phoneInput = form.querySelector("#phone");
+    if (phoneInput) {
+      phoneInput.addEventListener("input", function (e) {
+        e.target.value = String(e.target.value || "")
+          .replace(/\D/g, "")
+          .slice(0, 10);
+      });
+    }
+
     form.addEventListener("submit", function (event) {
       event.preventDefault();
 
@@ -220,6 +229,12 @@
 
       // Store address details in sessionStorage for next steps
       const addressData = {
+        fullName: String(form.fullName ? form.fullName.value : "").trim(),
+        phone: String(form.phone ? form.phone.value : "")
+          .trim()
+          .replace(/\D/g, "")
+          .slice(0, 10),
+        email: String(form.email ? form.email.value : "").trim(),
         address: address,
         city: form.city ? form.city.value.trim() : "",
         state: form.state ? form.state.value.trim() : "",
