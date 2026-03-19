@@ -222,12 +222,12 @@
         if (productId) {
           addToCart(productId, qty);
         }
-        window.location.href = "checkout.html";
+        window.location.href = "checkout-step1-new.html";
       }
 
       const checkoutLink = event.target.closest("[data-checkout-link]");
       if (checkoutLink) {
-        window.location.href = "checkout.html";
+        window.location.href = "checkout-step1-new.html";
       }
 
       const cartActionButton = event.target.closest("[data-cart-action]");

@@ -573,6 +573,28 @@ textarea {
   font-size: 1.05rem;
 }
 
+.form-embed-wrap {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.form-embed {
+  width: 100%;
+  height: 760px;
+  border: 0;
+  display: block;
+}
+
+.form-embed.is-empty {
+  height: 240px;
+}
+
+.order-actions {
+  margin-top: 1rem;
+}
+
 .cart-overlay {
   position: fixed;
   inset: 0;
@@ -993,4 +1015,393 @@ textarea {
 /* Ensure the check icon renders correctly even if the file encoding changes. */
 .next-steps li::before {
   content: "\2713";
+}
+
+/* Multi-Step Checkout Styles */
+.checkout-progress {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.progress-step {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  margin: 0 0.5rem;
+  font-weight: 600;
+  color: var(--muted);
+  border: 2px solid var(--line);
+}
+
+.progress-step:first-child {
+  margin-left: 0;
+}
+
+.progress-step:last-child {
+  margin-right: 0;
+}
+
+.progress-step.active {
+  background: var(--brand);
+  color: white;
+  border-color: var(--brand);
+}
+
+.progress-step.completed {
+  background: var(--brand-dark);
+  color: white;
+  border-color: var(--brand-dark);
+}
+
+.progress-step::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -1rem;
+  width: 0;
+  height: 0;
+  border-left: 1rem solid var(--line);
+  border-top: 1rem solid transparent;
+  border-bottom: 1rem solid transparent;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.progress-step.active::after {
+  border-left-color: var(--brand);
+}
+
+.progress-step.completed::after {
+  border-left-color: var(--brand-dark);
+}
+
+.progress-step:last-child::after {
+  display: none;
+}
+
+/* Form Styles */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  flex: 1;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--line);
+  border-radius: calc(var(--radius) / 2);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Phone Input Group */
+.phone-input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.country-code {
+  flex: 0 0 120px;
+  padding: 0.75rem 0.5rem;
+  border: 2px solid var(--line);
+  border-radius: calc(var(--radius) / 2);
+  font-size: 0.9rem;
+}
+
+/* Card Input Group */
+.card-input-group {
+  position: relative;
+}
+
+.card-icons {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 26px;
+  background: white;
+  border-radius: 4px;
+  padding: 2px;
+  transition: transform 0.2s ease;
+}
+
+.card-icon:hover {
+  transform: scale(1.1);
+}
+
+.card-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.card-icon.visa { color: #1565C0; }
+.card-icon.mastercard { color: #ED0006; }
+.card-icon.discover { color: #FF6000; }
+
+/* CVV Input Group */
+.cvv-input-group {
+  position: relative;
+}
+
+.cvv-help {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: var(--line);
+  color: var(--muted);
+  cursor: help;
+  font-size: 0.8rem;
+}
+
+.cvv-help:hover {
+  background: var(--brand);
+  color: white;
+}
+
+/* OTP Styles */
+.otp-container {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.otp-instruction {
+  margin-bottom: 2rem;
+}
+
+.otp-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.otp-number {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--brand);
+  margin: 1rem 0;
+}
+
+.otp-note {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 1rem;
+}
+
+.otp-input-group {
+  margin-bottom: 2rem;
+}
+
+.otp-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.otp-input {
+  width: 50px;
+  height: 60px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: 2px solid var(--line);
+  border-radius: calc(var(--radius) / 2);
+  transition: border-color 0.2s ease;
+}
+
+.otp-input:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+.otp-actions {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+.form-status {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: calc(var(--radius) / 2);
+  font-weight: 500;
+}
+
+.form-status.error {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.form-status.success {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+/* Security Notice */
+.security-notice {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f0fdf4;
+  border-radius: calc(var(--radius) / 2);
+  margin: 1.5rem 0;
+}
+
+.security-icon {
+  font-size: 1.5rem;
+}
+
+.security-notice p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* Order Summary Enhancements */
+.order-summary {
+  position: sticky;
+  top: 2rem;
+}
+
+.contact-info,
+.payment-info {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.contact-info h4,
+.payment-info h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.contact-info p,
+.payment-info p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+/* Button States */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--brand);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-link:hover {
+  color: var(--brand-dark);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .checkout-progress {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .progress-step {
+    margin: 0;
+  }
+  
+  .progress-step::after {
+    display: none;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .otp-inputs {
+    gap: 0.25rem;
+  }
+  
+  .otp-input {
+    width: 40px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .otp-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .card-icons {
+    display: none;
+  }
 }

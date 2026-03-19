@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mcart | Checkout - Step 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="site-bg"></div>
+
+  <header class="topbar">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Mcart</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="checkout-step1-new.html" class="is-active">Checkout</a>
+      </nav>
+      <button class="cart-icon-btn" type="button" data-open-cart>
+        Cart <span class="cart-count" data-cart-count>0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="checkout-progress">
+      <div class="progress-step active">1. Contact Info</div>
+      <div class="progress-step">2. Payment</div>
+      <div class="progress-step">3. Verification</div>
+    </div>
+
+    <div class="checkout-layout">
+      <form id="checkout-form" class="panel" method="POST">
+        <h2>Contact Information</h2>
+        <p class="card-desc">Step 1 of 3: Enter your contact details and address.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullName">Full Name *</label>
+            <input id="fullName" name="name" type="text" placeholder="Your name" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <div class="phone-input-group">
+              <select id="countryCode" name="country_code" class="country-code">
+                <option value="+1">+1 (USA)</option>
+                <option value="+44">+44 (UK)</option>
+                <option value="+91" selected>+91 (India)</option>
+                <option value="+61">+61 (Australia)</option>
+                <option value="+86">+86 (China)</option>
+              </select>
+              <input id="phone" name="phone" type="tel" inputmode="numeric" maxlength="15" placeholder="Phone number" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="streetAddress">Street Address *</label>
+            <textarea id="streetAddress" name="address" placeholder="House number, street name, apartment number" required></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="addressLine2">Address Line 2 (Optional)</label>
+            <input id="addressLine2" name="address2" type="text" placeholder="Apartment, suite, unit, building, floor, etc." />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City *</label>
+            <input id="city" name="city" type="text" placeholder="City name" required />
+          </div>
+          <div class="form-group">
+            <label for="state">State *</label>
+            <input id="state" name="state" type="text" placeholder="State name" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pincode">PIN Code *</label>
+            <input id="pincode" name="pincode" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit PIN code" required />
+          </div>
+        </div>
+
+        <!-- Hidden fields for additional data -->
+        <input type="hidden" name="_subject" value="Mcart Order - Step 1">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="http://127.0.0.1:8000/checkout-step2-new.html">
+        <input type="hidden" name="order_step" value="1">
+        <input type="hidden" name="cart_data" id="cart-data">
+        <input type="hidden" name="order_total" id="order-total">
+        <input type="hidden" name="timestamp" id="timestamp">
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" onclick="history.back()">Back</button>
+          <button type="submit" class="btn btn-primary" id="continue-btn">Continue to Payment</button>
+        </div>
+
+        <div id="form-status" class="form-status"></div>
+      </form>
+
+      <div class="panel order-summary">
+        <h3>Order Summary</h3>
+        <div id="checkout-cart-items"></div>
+        <div class="order-total">
+          <strong>Total: <span id="checkout-total">INR 0</span></strong>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-row">
+      <p>2026 Mcart. Secure checkout powered by modern web technology.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script>
+    // Simple, reliable form handling
+    document.addEventListener('DOMContentLoaded', function() {
+      // Render cart summary
+      function renderOrderSummary() {
+        const cartNode = document.getElementById('checkout-cart-items');
+        const totalNode = document.getElementById('checkout-total');
+        const cartDataNode = document.getElementById('cart-data');
+        const orderTotalNode = document.getElementById('order-total');
+
+        if (!cartNode || !totalNode) return;
+
+        const items = window.CartAPI && typeof window.CartAPI.getItems === 'function' 
+          ? window.CartAPI.getItems() 
+          : [];
+        
+        const total = window.CartAPI && typeof window.CartAPI.getTotal === 'function'
+          ? window.CartAPI.getTotal()
+          : 0;
+
+        totalNode.textContent = window.formatInr ? window.formatInr(total) : 'INR ' + total;
+
+        if (cartDataNode) {
+          cartDataNode.value = JSON.stringify(items);
+        }
+        if (orderTotalNode) {
+          orderTotalNode.value = total;
+        }
+
+        if (!items.length) {
+          cartNode.innerHTML = '<p class="empty-note">No products in cart.</p>';
+          return;
+        }
+
+        cartNode.innerHTML = items.map(function(item) {
+          return (
+            '<div class="checkout-item">' +
+            '<span>' + item.name + ' x ' + item.qty + '</span>' +
+            '<strong>' + (window.formatInr ? window.formatInr(item.price * item.qty) : 'INR ' + item.price * item.qty) + '</strong>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      // Set timestamp
+      document.getElementById('timestamp').value = new Date().toISOString();
+
+      // Render cart on load
+      renderOrderSummary();
+
+      // Form validation
+      const form = document.getElementById('checkout-form');
+      const continueBtn = document.getElementById('continue-btn');
+      const statusNode = document.getElementById('form-status');
+
+      // Input formatting
+      const phoneInput = document.getElementById('phone');
+      if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+          e.target.value = e.target.value.replace(/\D/g, '').slice(0, 15);
+        });
+      }
+
+      const pincodeInput = document.getElementById('pincode');
+      if (pincodeInput) {
+        pincodeInput.addEventListener('input', function(e) {
+          e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+        });
+      }
+
+      // Form submission
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Validate cart has items
+        const items = window.CartAPI && typeof window.CartAPI.getItems === 'function' 
+          ? window.CartAPI.getItems() 
+          : [];
+        
+        if (!items.length) {
+          if (statusNode) {
+            statusNode.textContent = 'Your cart is empty. Please add products first.';
+            statusNode.className = 'form-status error';
+          }
+          return;
+        }
+
+        // Basic validation
+        const fullName = form.name.value.trim();
+        const email = form.email.value.trim();
+        const phone = form.phone.value.trim();
+        const address = form.address.value.trim();
+        const city = form.city.value.trim();
+        const state = form.state.value.trim();
+        const pincode = form.pincode.value.trim();
+
+        if (!fullName || !email || !phone || !address || !city || !state || !pincode) {
+          if (statusNode) {
+            statusNode.textContent = 'Please fill in all required fields.';
+            statusNode.className = 'form-status error';
+          }
+          return;
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          if (statusNode) {
+            statusNode.textContent = 'Please enter a valid email address.';
+            statusNode.className = 'form-status error';
+          }
+          return;
+        }
+
+        // PIN code validation
+        if (!/^\d{6}$/.test(pincode)) {
+          if (statusNode) {
+            statusNode.textContent = 'Please enter a valid 6-digit PIN code.';
+            statusNode.className = 'form-status error';
+          }
+          return;
+        }
+
+        // Save to sessionStorage for next steps
+        const formData = {
+          name: fullName,
+          email: email,
+          country_code: form.country_code.value,
+          phone: phone,
+          address: address,
+          address2: form.address2.value.trim(),
+          city: city,
+          state: state,
+          pincode: pincode,
+          cart_items: items,
+          order_total: window.CartAPI && typeof window.CartAPI.getTotal === 'function' 
+            ? window.CartAPI.getTotal() 
+            : 0
+        };
+
+        sessionStorage.setItem('checkoutStep1', JSON.stringify(formData));
+
+        // Show loading
+        continueBtn.disabled = true;
+        continueBtn.textContent = 'Processing...';
+        if (statusNode) {
+          statusNode.textContent = 'Submitting your information...';
+          statusNode.className = 'form-status';
+        }
+
+        // Submit form
+        setTimeout(function() {
+          // Send data to FormSubmit.co in background (optional)
+          const formData = new FormData();
+          formData.append('_subject', 'Mcart Order - Step 1');
+          formData.append('_template', 'table');
+          formData.append('_captcha', 'false');
+          formData.append('name', formData.fullName);
+          formData.append('email', formData.email);
+          formData.append('phone', formData.countryCode + ' ' + formData.phone);
+          formData.append('address', formData.streetAddress);
+          formData.append('address2', formData.addressLine2);
+          formData.append('city', formData.city);
+          formData.append('state', formData.state);
+          formData.append('pincode', formData.pincode);
+          formData.append('cart_data', JSON.stringify(formData.cartItems));
+          formData.append('order_total', formData.orderTotal);
+
+          // Try to send to FormSubmit.co (but don't wait for it)
+          fetch('https://formsubmit.co/akrasd25@gmail.com', {
+            method: 'POST',
+            body: formData
+          }).catch(function(error) {
+            console.log('FormSubmit.co submission failed:', error);
+          });
+
+          // Redirect to step 2
+          window.location.href = 'checkout-step2-new.html';
+        }, 500);
+      });
+    });
+  </script>
+</body>
+</html>

