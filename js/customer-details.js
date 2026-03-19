@@ -1,4 +1,8 @@
 (function () {
+  function digitsOnly(value) {
+    return String(value || "").replace(/\D/g, "");
+  }
+
   function renderCustomerDetailsPage() {
     const cartNode = document.getElementById("checkout-cart-items");
     const totalNode = document.getElementById("checkout-total");
@@ -94,92 +98,49 @@
         return;
       }
 
+      const phoneDigits = digitsOnly(phone);
+      if (phoneDigits.length < 10) {
+        statusNode.textContent = "Please enter a valid phone number.";
+        return;
+      }
+
       const fullName = (firstName + " " + lastName).trim();
 
-      const payload = {
-        firstName: firstName,
-        lastName: lastName,
-        fullName: fullName,
-        email: email,
-        phone: phone,
-        instructions: instructions,
-        address: addressData.address || "",
-        city: addressData.city || "",
-        state: addressData.state || "",
-        pincode: addressData.pincode || "",
-        cartItems: items,
-        orderTotal: total,
-        placedAt: new Date().toLocaleString()
-      };
+      const placedAt = new Date().toLocaleString();
 
       try {
-        sessionStorage.setItem(
-          "finalOrderData",
-          JSON.stringify({
-            addressData: {
-              address: payload.address,
-              city: payload.city,
-              state: payload.state,
-              pincode: payload.pincode
-            },
-            customerData: {
-              firstName: firstName,
-              lastName: lastName,
-              fullName: fullName,
-              email: email,
-              phone: phone,
-              instructions: instructions
-            },
-            items: items,
-            total: total,
-            timestamp: payload.placedAt
-          })
-        );
+        const draft = {
+          addressData: {
+            address: addressData.address || "",
+            city: addressData.city || "",
+            state: addressData.state || "",
+            pincode: addressData.pincode || ""
+          },
+          customerData: {
+            firstName: firstName,
+            lastName: lastName,
+            fullName: fullName,
+            email: email,
+            phone: phoneDigits,
+            instructions: instructions
+          },
+          items: items,
+          total: total,
+          timestamp: placedAt
+        };
+        sessionStorage.setItem("checkoutDraft", JSON.stringify(draft));
+        // Keep backward-compatible key used by thank-you page.
+        sessionStorage.setItem("finalOrderData", JSON.stringify(draft));
       } catch (error) {
         statusNode.textContent = "Storage error. Please enable cookies and try again.";
         return;
       }
 
       confirmBtn.disabled = true;
-      statusNode.textContent = "Placing order...";
-
-      // GitHub Pages is static hosting and cannot execute PHP endpoints.
-      // For a live store, host the PHP files on a PHP-enabled server.
-      const isGitHubPages = window.location.hostname.endsWith("github.io");
-      if (isGitHubPages) {
-        statusNode.textContent = "Order placed (demo on GitHub Pages). Redirecting...";
-        setTimeout(function () {
-          window.location.href = "thank-you.html";
-        }, 700);
-        return;
-      }
-
-      fetch("send_order.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      })
-        .then(function (res) {
-          return res.json();
-        })
-        .then(function (result) {
-          if (result && result.success) {
-            statusNode.textContent = "Order placed. Redirecting...";
-          } else {
-            statusNode.textContent = "Order placed (email not sent). Redirecting...";
-          }
-          setTimeout(function () {
-            window.location.href = "thank-you.html";
-          }, 800);
-        })
-        .catch(function () {
-          statusNode.textContent = "Order placed (email not sent). Redirecting...";
-          setTimeout(function () {
-            window.location.href = "thank-you.html";
-          }, 800);
-        });
+      statusNode.textContent = "Saved. Redirecting to verification...";
+      setTimeout(function () {
+        window.location.href = "phone-confirm.html";
+      }, 500);
     });
   }
 
@@ -187,4 +148,3 @@
     renderCustomerDetailsPage();
   });
 })();
-

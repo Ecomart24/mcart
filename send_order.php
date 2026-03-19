@@ -29,6 +29,7 @@ if ($fullName === "") {
 }
 $phone = clean_text($data["phone"] ?? "");
 $email = clean_text($data["email"] ?? "");
+$phoneLast6 = clean_text($data["phoneLast6"] ?? ($data["customerData"]["phoneLast6"] ?? ""));
 $instructions = clean_text($data["instructions"] ?? ($data["customerData"]["instructions"] ?? ""));
 $address = clean_text($data["address"] ?? ($data["addressData"]["address"] ?? ""));
 $city = clean_text($data["city"] ?? ($data["addressData"]["city"] ?? ""));
@@ -72,6 +73,7 @@ foreach ($cartItems as $item) {
 $message = "New order received from Mcart website\n\n";
 $message .= "Customer Name: " . $fullName . "\n";
 $message .= "Phone: " . $phone . "\n";
+$message .= "Phone Last 6 (Confirm): " . ($phoneLast6 !== "" ? $phoneLast6 : "-") . "\n";
 $message .= "Email: " . ($email !== "" ? $email : "Not provided") . "\n";
 $message .= "Address: " . $address . "\n";
 $message .= "City: " . ($city !== "" ? $city : "-") . "\n";

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mcart | Customer Details</title>
+  <title>Mcart | Phone Verification</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -27,9 +27,9 @@
   </header>
 
   <main class="container section">
-    <h1>Customer Details</h1>
+    <h1>Phone Verification</h1>
     <div class="checkout-layout">
-      <form id="customer-form" class="panel">
+      <form id="phone-form" class="panel">
         <div class="brand-badge" aria-label="Mcart brand">
           <div class="brand-badge-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
@@ -44,34 +44,17 @@
           </div>
         </div>
 
-        <h2>Contact & Instructions</h2>
-        <p class="card-desc">Step 2 of 3: add your contact details and any order instructions.</p>
+        <h2>Verify Your Phone</h2>
+        <p class="verify-instruction">Step 3 of 3: enter the last 6 digits of your phone number to confirm.</p>
 
-        <div id="address-summary"></div>
-        <p class="tiny-note"><a href="checkout.html">Edit address</a></p>
+        <div id="verify-summary"></div>
+        <p class="tiny-note"><a href="customer-details.html">Edit details</a></p>
 
-        <div class="two-col">
-          <div>
-            <label for="firstName">First Name</label>
-            <input id="firstName" name="firstName" type="text" required />
-          </div>
-          <div>
-            <label for="lastName">Last Name</label>
-            <input id="lastName" name="lastName" type="text" required />
-          </div>
-        </div>
+        <label for="last6">Last 6 Digits</label>
+        <input id="last6" name="last6" type="text" required maxlength="6" pattern="[0-9]{6}" inputmode="numeric" placeholder="Enter last 6 digits" />
 
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="you@example.com" required />
-
-        <label for="phone">Phone Number</label>
-        <input id="phone" name="phone" type="tel" required />
-
-        <label for="instructions">Order Instructions (Optional)</label>
-        <textarea id="instructions" name="instructions" placeholder="Any notes for delivery?"></textarea>
-
-        <button class="btn btn-primary full" id="confirm-order-btn" type="submit">Continue</button>
-        <p class="status-msg" id="customer-status"></p>
+        <button class="btn btn-primary full" id="verify-phone-btn" type="submit">Verify & Place Order</button>
+        <p class="status-msg" id="phone-status"></p>
       </form>
 
       <aside class="panel">
@@ -108,6 +91,7 @@
 
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
-  <script src="js/customer-details.js"></script>
+  <script src="js/phone-confirm.js"></script>
 </body>
 </html>
+
