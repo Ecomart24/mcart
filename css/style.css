@@ -632,6 +632,21 @@ textarea {
   font-size: 0.92rem;
 }
 
+.tiny-note {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.tiny-note a {
+  color: var(--brand-dark);
+  text-decoration: underline;
+}
+
+.tiny-note a:hover {
+  color: var(--brand);
+}
+
 .toast {
   position: fixed;
   left: 50%;

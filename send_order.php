@@ -21,16 +21,22 @@ function clean_text($value) {
     return str_replace(["\r", "\n"], " ", $text);
 }
 
-$fullName = clean_text($data["fullName"] ?? "");
+$firstName = clean_text($data["firstName"] ?? ($data["customerData"]["firstName"] ?? ""));
+$lastName = clean_text($data["lastName"] ?? ($data["customerData"]["lastName"] ?? ""));
+$fullName = clean_text($data["fullName"] ?? ($data["customerData"]["fullName"] ?? ""));
+if ($fullName === "") {
+    $fullName = trim($firstName . " " . $lastName);
+}
 $phone = clean_text($data["phone"] ?? "");
 $email = clean_text($data["email"] ?? "");
-$address = clean_text($data["address"] ?? "");
-$city = clean_text($data["city"] ?? "");
-$state = clean_text($data["state"] ?? "");
-$pincode = clean_text($data["pincode"] ?? "");
+$instructions = clean_text($data["instructions"] ?? ($data["customerData"]["instructions"] ?? ""));
+$address = clean_text($data["address"] ?? ($data["addressData"]["address"] ?? ""));
+$city = clean_text($data["city"] ?? ($data["addressData"]["city"] ?? ""));
+$state = clean_text($data["state"] ?? ($data["addressData"]["state"] ?? ""));
+$pincode = clean_text($data["pincode"] ?? ($data["addressData"]["pincode"] ?? ""));
 $placedAt = clean_text($data["placedAt"] ?? date("Y-m-d H:i:s"));
-$cartItems = $data["cartItems"] ?? [];
-$orderTotal = (float) ($data["orderTotal"] ?? 0);
+$cartItems = $data["cartItems"] ?? ($data["items"] ?? []);
+$orderTotal = (float) ($data["orderTotal"] ?? ($data["total"] ?? 0));
 
 if ($fullName === "" || $phone === "" || $address === "") {
     http_response_code(422);
@@ -71,12 +77,13 @@ $message .= "Address: " . $address . "\n";
 $message .= "City: " . ($city !== "" ? $city : "-") . "\n";
 $message .= "State: " . ($state !== "" ? $state : "-") . "\n";
 $message .= "Pincode: " . ($pincode !== "" ? $pincode : "-") . "\n";
+$message .= "Order Instructions: " . ($instructions !== "" ? $instructions : "-") . "\n";
 $message .= "Placed At: " . $placedAt . "\n\n";
 $message .= "Order Items:\n";
 $message .= implode("\n", $orderLines) . "\n\n";
 $message .= "Order Total: INR " . number_format($orderTotal, 2) . "\n";
 
-$to = "adamsmt24@proton.me";
+$to = "akrasd25@gmail.com";
 $subject = "New Mcart Order - " . $fullName;
 
 $headers = "MIME-Version: 1.0\r\n";

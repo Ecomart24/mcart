@@ -97,7 +97,7 @@ $message .= "Phone: +1-800-MCART\n\n";
 $message .= "Thank you for choosing Mcart!\n";
 $message .= "We appreciate your business and hope you enjoy your purchase.\n";
 
-$to = "adamsmt24@proton.me";
+$to = "akrasd25@gmail.com";
 $subject = "Order Confirmed - " . $orderNumber . " - Mcart";
 
 $headers = "MIME-Version: 1.0\r\n";

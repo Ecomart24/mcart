@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mcart | OTP Verification</title>
+  <title>Mcart | Customer Details</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -18,7 +18,7 @@
       <nav class="nav-links">
         <a href="index.html">Home</a>
         <a href="products.html">Products</a>
-        <a href="checkout.html">Checkout</a>
+        <a href="checkout.html" class="is-active">Checkout</a>
       </nav>
       <button class="cart-icon-btn" type="button" data-open-cart>
         Cart <span class="cart-count" data-cart-count>0</span>
@@ -27,21 +27,37 @@
   </header>
 
   <main class="container section">
-    <h1>OTP Verification</h1>
+    <h1>Customer Details</h1>
     <div class="checkout-layout">
-      <form id="otp-form" class="panel">
-        <h2>Enter OTP</h2>
-        <p class="otp-instruction">For demo, a 6-digit OTP will be shown on screen. Enter it below to complete your order.</p>
+      <form id="customer-form" class="panel">
+        <h2>Contact & Instructions</h2>
+        <p class="card-desc">Step 2 of 2: add your contact details and any order instructions.</p>
 
-        <label for="otp">One-Time Password</label>
-        <input id="otp" name="otp" type="text" required placeholder="Enter 6-digit OTP" maxlength="6" pattern="[0-9]{6}" />
+        <div id="address-summary"></div>
+        <p class="tiny-note"><a href="checkout.html">Edit address</a></p>
 
-        <div class="otp-actions">
-          <button class="btn btn-primary full" id="verify-otp-btn" type="submit">Verify & Complete Order</button>
-          <button class="btn btn-ghost full" id="resend-otp-btn" type="button">Resend OTP</button>
+        <div class="two-col">
+          <div>
+            <label for="firstName">First Name</label>
+            <input id="firstName" name="firstName" type="text" required />
+          </div>
+          <div>
+            <label for="lastName">Last Name</label>
+            <input id="lastName" name="lastName" type="text" required />
+          </div>
         </div>
 
-        <p class="status-msg" id="otp-status"></p>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" required />
+
+        <label for="phone">Phone Number</label>
+        <input id="phone" name="phone" type="tel" required />
+
+        <label for="instructions">Order Instructions (Optional)</label>
+        <textarea id="instructions" name="instructions" placeholder="Any notes for delivery?"></textarea>
+
+        <button class="btn btn-primary full" id="confirm-order-btn" type="submit">Place Order</button>
+        <p class="status-msg" id="customer-status"></p>
       </form>
 
       <aside class="panel">
@@ -78,6 +94,7 @@
 
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
-  <script src="js/otp-verification.js"></script>
+  <script src="js/customer-details.js"></script>
 </body>
 </html>
+

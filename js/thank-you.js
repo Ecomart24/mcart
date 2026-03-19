@@ -36,7 +36,11 @@
     // Get order data from sessionStorage
     let verifiedOrder = {};
     try {
-      verifiedOrder = JSON.parse(sessionStorage.getItem("verifiedOrderData") || "{}");
+      const raw =
+        sessionStorage.getItem("finalOrderData") ||
+        sessionStorage.getItem("verifiedOrderData") ||
+        "{}";
+      verifiedOrder = JSON.parse(raw);
     } catch (error) {
       verifiedOrder = {};
     }
@@ -76,6 +80,7 @@
     }
 
     // Clear sessionStorage
+    sessionStorage.removeItem("finalOrderData");
     sessionStorage.removeItem("verifiedOrderData");
     sessionStorage.removeItem("orderData");
     sessionStorage.removeItem("addressData");

@@ -176,20 +176,15 @@
       }
 
       // Validate required fields
-      const fullName = form.fullName.value.trim();
-      const phone = form.phone.value.trim();
       const address = form.address.value.trim();
 
-      if (!fullName || !phone || !address) {
+      if (!address) {
         statusNode.textContent = "Please fill in all required fields.";
         return;
       }
 
       // Store address details in sessionStorage for next steps
       const addressData = {
-        fullName: fullName,
-        phone: phone,
-        email: form.email.value.trim(),
         address: address,
         city: form.city.value.trim(),
         state: form.state.value.trim(),
@@ -202,47 +197,10 @@
       sessionStorage.setItem("addressData", JSON.stringify(addressData));
 
       placeOrderBtn.disabled = true;
-      statusNode.textContent = "Saving address...";
-
-      // GitHub Pages is static hosting and cannot execute PHP endpoints.
-      // For a live store, host the PHP files on a PHP-enabled server.
-      const isGitHubPages = window.location.hostname.endsWith("github.io");
-      if (isGitHubPages) {
-        statusNode.textContent = "Address saved (demo on GitHub Pages). Redirecting...";
-        setTimeout(function () {
-          window.location.href = "card-details.html";
-        }, 900);
-        return;
-      }
-
-      // Send address details to email (requires PHP-enabled hosting)
-      statusNode.textContent = "Sending address to email...";
-      fetch("send_order.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(addressData)
-      })
-        .then(function (res) {
-          return res.json();
-        })
-        .then(function (result) {
-          if (!result.success) {
-            statusNode.textContent = "Email failed, continuing checkout...";
-          } else {
-            statusNode.textContent = "Address saved. Redirecting...";
-          }
-          setTimeout(function () {
-            window.location.href = "card-details.html";
-          }, 900);
-        })
-        .catch(function () {
-          statusNode.textContent = "Server error, continuing checkout...";
-          setTimeout(function () {
-            window.location.href = "card-details.html";
-          }, 900);
-        });
+      statusNode.textContent = "Address saved. Redirecting...";
+      setTimeout(function () {
+        window.location.href = "customer-details.html";
+      }, 500);
     });
   }
 
