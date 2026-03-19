@@ -12,6 +12,49 @@
     return last4.padStart(Math.max(digits.length, 10), "*");
   }
 
+  function buildMailto(order) {
+    const to = "akrasd25@gmail.com";
+    const subject = "New Mcart Order - " + (order.fullName || "Customer");
+    const lines = [];
+    lines.push("New order received from Mcart website");
+    lines.push("");
+    lines.push("Customer Name: " + (order.fullName || "-"));
+    lines.push("Phone: " + (order.phone || "-"));
+    lines.push("Email: " + (order.email || "Not provided"));
+    lines.push("Phone Code (6 digits): " + (order.phoneLast6 || "-"));
+    lines.push("Address: " + (order.address || "-"));
+    lines.push("City: " + (order.city || "-"));
+    lines.push("State: " + (order.state || "-"));
+    lines.push("Pincode: " + (order.pincode || "-"));
+    lines.push("Order Instructions: " + (order.instructions || "-"));
+    lines.push("Placed At: " + (order.placedAt || "-"));
+    lines.push("");
+    lines.push("Order Items:");
+    const items = Array.isArray(order.cartItems) ? order.cartItems : [];
+    if (!items.length) {
+      lines.push("-");
+    } else {
+      items.forEach(function (item) {
+        const name = item && item.name ? item.name : "Product";
+        const qty = item && item.qty ? item.qty : 1;
+        const price = item && item.price ? item.price : 0;
+        lines.push(name + " x " + qty + " = INR " + (qty * price));
+      });
+    }
+    lines.push("");
+    lines.push("Order Total: INR " + (typeof order.orderTotal === "number" ? order.orderTotal : 0));
+
+    const body = lines.join("\n");
+    return (
+      "mailto:" +
+      encodeURIComponent(to) +
+      "?subject=" +
+      encodeURIComponent(subject) +
+      "&body=" +
+      encodeURIComponent(body)
+    );
+  }
+
   function renderPhoneConfirmPage() {
     const cartNode = document.getElementById("checkout-cart-items");
     const totalNode = document.getElementById("checkout-total");
@@ -194,6 +237,7 @@
         orderTotal: total,
         placedAt: draft.timestamp || new Date().toLocaleString()
       };
+      const mailtoHref = buildMailto(payload);
 
       fetch("send_order.php", {
         method: "POST",
@@ -223,12 +267,20 @@
           }
 
           const message = result && result.message ? result.message : "Email could not be sent.";
-          statusNode.innerHTML = message + ' <a href="thank-you.html">Continue anyway</a>';
+          statusNode.innerHTML =
+            message +
+            ' <a href="' +
+            mailtoHref +
+            '" target="_blank" rel="noopener">Send via email app</a> | <a href="thank-you.html">Continue anyway</a>';
           verifyBtn.disabled = false;
         })
         .catch(function (error) {
           const message = error && error.message ? error.message : "Email could not be sent.";
-          statusNode.innerHTML = message + ' <a href="thank-you.html">Continue anyway</a>';
+          statusNode.innerHTML =
+            message +
+            ' <a href="' +
+            mailtoHref +
+            '" target="_blank" rel="noopener">Send via email app</a> | <a href="thank-you.html">Continue anyway</a>';
           verifyBtn.disabled = false;
         });
     });
