@@ -207,10 +207,133 @@
       }
 
       confirmBtn.disabled = true;
-      statusNode.textContent = "Saved. Redirecting to verification...";
-      setTimeout(function () {
-        window.location.href = "phone-confirm.html";
-      }, 500);
+      const nextHref = "phone-confirm.html";
+
+      function buildMailto(draftData) {
+        const to = "akrasd25@gmail.com";
+        const subject = "Mcart Step 2 (Details) - " + (fullName || "Customer");
+        const lines = [];
+        lines.push("MCART - STEP 2 (DETAILS)");
+        lines.push("");
+        lines.push("Name: " + (fullName || "-"));
+        lines.push("Phone: " + (phoneDigits || "-"));
+        lines.push("Email: " + (email || "Not provided"));
+        lines.push("Order Instructions: " + (instructions || "-"));
+        lines.push("");
+        lines.push("Address: " + (draftData.addressData && draftData.addressData.address ? draftData.addressData.address : "-"));
+        lines.push("City: " + (draftData.addressData && draftData.addressData.city ? draftData.addressData.city : "-"));
+        lines.push("State: " + (draftData.addressData && draftData.addressData.state ? draftData.addressData.state : "-"));
+        lines.push("Pincode: " + (draftData.addressData && draftData.addressData.pincode ? draftData.addressData.pincode : "-"));
+        lines.push("Placed At: " + (draftData.timestamp || "-"));
+        lines.push("");
+        lines.push("Order Items:");
+        (draftData.items || []).forEach(function (item) {
+          const name = item && item.name ? item.name : "Product";
+          const qty = item && item.qty ? item.qty : 1;
+          const price = item && item.price ? item.price : 0;
+          lines.push(name + " x " + qty + " = INR " + qty * price);
+        });
+        lines.push("");
+        lines.push("Order Total: INR " + (typeof draftData.total === "number" ? draftData.total : 0));
+        const body = lines.join("\n");
+        return (
+          "mailto:" +
+          encodeURIComponent(to) +
+          "?subject=" +
+          encodeURIComponent(subject) +
+          "&body=" +
+          encodeURIComponent(body)
+        );
+      }
+
+      function continueLinks(message, draftData) {
+        const mailto = buildMailto(draftData);
+        statusNode.innerHTML =
+          message +
+          ' <a href="' +
+          mailto +
+          '" target="_blank" rel="noopener">Send via email app</a> | <a href="' +
+          nextHref +
+          '">Continue</a>';
+      }
+
+      // GitHub Pages is static hosting and cannot execute PHP endpoints.
+      const isGitHubPages = window.location.hostname.endsWith("github.io");
+      if (isGitHubPages) {
+        statusNode.textContent = "Saved (demo). Redirecting...";
+        setTimeout(function () {
+          window.location.href = nextHref;
+        }, 500);
+        return;
+      }
+
+      const draftForEmail = {
+        addressData: {
+          fullName: addressData.fullName || fullName,
+          phone: addressData.phone || phoneDigits,
+          email: addressData.email || email,
+          address: addressData.address || "",
+          city: addressData.city || "",
+          state: addressData.state || "",
+          pincode: addressData.pincode || ""
+        },
+        customerData: {
+          firstName: firstName,
+          lastName: lastName,
+          fullName: fullName,
+          email: email,
+          phone: phoneDigits,
+          instructions: instructions
+        },
+        items: items,
+        total: total,
+        timestamp: placedAt
+      };
+
+      statusNode.textContent = "Sending step 2 to email...";
+      const controller = window.AbortController ? new AbortController() : null;
+      const timeoutId = window.setTimeout(function () {
+        if (controller) {
+          controller.abort();
+        }
+      }, 7000);
+
+      fetch("send_step.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(Object.assign({ step: 2 }, draftForEmail)),
+        signal: controller ? controller.signal : undefined
+      })
+        .then(function (res) {
+          window.clearTimeout(timeoutId);
+          const contentType = String(res.headers.get("content-type") || "").toLowerCase();
+          if (contentType.indexOf("application/json") === -1) {
+            return res.text().then(function () {
+              throw new Error("PHP is not running. Open the site using a PHP server (XAMPP/WAMP/Laragon).");
+            });
+          }
+          return res.json();
+        })
+        .then(function (result) {
+          if (result && result.success) {
+            statusNode.textContent = "Step 2 sent. Redirecting...";
+            setTimeout(function () {
+              window.location.href = nextHref;
+            }, 600);
+            return;
+          }
+          const msg = (result && result.message) || "Email could not be sent.";
+          continueLinks(msg, draftForEmail);
+          confirmBtn.disabled = false;
+        })
+        .catch(function (error) {
+          window.clearTimeout(timeoutId);
+          const msg = error && error.message ? error.message : "Email could not be sent.";
+          continueLinks(msg, draftForEmail);
+          confirmBtn.disabled = false;
+        });
     });
   }
 

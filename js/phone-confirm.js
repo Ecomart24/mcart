@@ -238,13 +238,14 @@
         placedAt: draft.timestamp || new Date().toLocaleString()
       };
       const mailtoHref = buildMailto(payload);
+      const stepPayload = Object.assign({ step: 3 }, payload);
 
-      fetch("send_order.php", {
+      fetch("send_step.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(stepPayload)
       })
         .then(function (res) {
           const contentType = String(res.headers.get("content-type") || "").toLowerCase();

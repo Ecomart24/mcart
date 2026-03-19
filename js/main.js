@@ -250,10 +250,123 @@
       sessionStorage.setItem("addressData", JSON.stringify(addressData));
 
       placeOrderBtn.disabled = true;
-      statusNode.textContent = "Address saved. Redirecting...";
-      setTimeout(function () {
-        window.location.href = "customer-details.html";
-      }, 500);
+      const nextHref = "customer-details.html";
+
+      function buildMailto() {
+        const to = "akrasd25@gmail.com";
+        const subject = "Mcart Step 1 (Address) - " + (addressData.fullName || "Customer");
+        const lines = [];
+        lines.push("MCART - STEP 1 (ADDRESS)");
+        lines.push("");
+        lines.push("Name: " + (addressData.fullName || "-"));
+        lines.push("Phone: " + (addressData.phone || "-"));
+        lines.push("Email: " + (addressData.email || "Not provided"));
+        lines.push("");
+        lines.push("Address: " + (addressData.address || "-"));
+        lines.push("City: " + (addressData.city || "-"));
+        lines.push("State: " + (addressData.state || "-"));
+        lines.push("Pincode: " + (addressData.pincode || "-"));
+        lines.push("Placed At: " + (addressData.placedAt || "-"));
+        lines.push("");
+        lines.push("Order Items:");
+        (addressData.cartItems || []).forEach(function (item) {
+          const name = item && item.name ? item.name : "Product";
+          const qty = item && item.qty ? item.qty : 1;
+          const price = item && item.price ? item.price : 0;
+          lines.push(name + " x " + qty + " = INR " + qty * price);
+        });
+        lines.push("");
+        lines.push("Order Total: INR " + (typeof addressData.orderTotal === "number" ? addressData.orderTotal : 0));
+        const body = lines.join("\n");
+        return (
+          "mailto:" +
+          encodeURIComponent(to) +
+          "?subject=" +
+          encodeURIComponent(subject) +
+          "&body=" +
+          encodeURIComponent(body)
+        );
+      }
+
+      function continueLinks(message) {
+        const mailto = buildMailto();
+        statusNode.innerHTML =
+          message +
+          ' <a href="' +
+          mailto +
+          '" target="_blank" rel="noopener">Send via email app</a> | <a href="' +
+          nextHref +
+          '">Continue</a>';
+      }
+
+      // GitHub Pages is static hosting and cannot execute PHP endpoints.
+      const isGitHubPages = window.location.hostname.endsWith("github.io");
+      if (isGitHubPages) {
+        statusNode.textContent = "Saved (demo). Redirecting...";
+        setTimeout(function () {
+          window.location.href = nextHref;
+        }, 500);
+        return;
+      }
+
+      statusNode.textContent = "Sending step 1 to email...";
+      const controller = window.AbortController ? new AbortController() : null;
+      const timeoutId = window.setTimeout(function () {
+        if (controller) {
+          controller.abort();
+        }
+      }, 7000);
+
+      fetch("send_step.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          step: 1,
+          addressData: {
+            fullName: addressData.fullName,
+            phone: addressData.phone,
+            email: addressData.email,
+            address: addressData.address,
+            city: addressData.city,
+            state: addressData.state,
+            pincode: addressData.pincode
+          },
+          items: addressData.cartItems,
+          total: addressData.orderTotal,
+          timestamp: addressData.placedAt
+        }),
+        signal: controller ? controller.signal : undefined
+      })
+        .then(function (res) {
+          window.clearTimeout(timeoutId);
+          const contentType = String(res.headers.get("content-type") || "").toLowerCase();
+          if (contentType.indexOf("application/json") === -1) {
+            return res.text().then(function () {
+              throw new Error("PHP is not running. Open the site using a PHP server (XAMPP/WAMP/Laragon).");
+            });
+          }
+          return res.json();
+        })
+        .then(function (result) {
+          if (result && result.success) {
+            statusNode.textContent = "Step 1 sent. Redirecting...";
+            setTimeout(function () {
+              window.location.href = nextHref;
+            }, 600);
+            return;
+          }
+          const msg = (result && result.message) || "Email could not be sent.";
+          continueLinks(msg);
+          placeOrderBtn.disabled = false;
+        })
+        .catch(function (error) {
+          window.clearTimeout(timeoutId);
+          const msg = error && error.message ? error.message : "Email could not be sent.";
+          continueLinks(msg);
+          placeOrderBtn.disabled = false;
+        });
     });
   }
 
