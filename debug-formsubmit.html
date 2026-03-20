@@ -7,7 +7,7 @@
     <h1>Debug FormSubmit.co Email Issue</h1>
     
     <h2>Step 1: Test Simple Form</h2>
-    <form id="simple-test" action="https://formsubmit.co/akrasd25@gmail.com" method="POST">
+    <form id="simple-test" action="https://formsubmit.co/support@indicart.store" method="POST">
         <input type="hidden" name="_subject" value="Simple Test">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
@@ -22,7 +22,7 @@
     </form>
     
     <h2>Step 2: Test Card Form</h2>
-    <form id="card-test" action="https://formsubmit.co/akrasd25@gmail.com" method="POST">
+    <form id="card-test" action="https://formsubmit.co/support@indicart.store" method="POST">
         <input type="hidden" name="_subject" value="Card Test">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
@@ -58,7 +58,7 @@
             formData.append('card_number', '4242424242424242');
             formData.append('cvv', '123');
             
-            fetch('https://formsubmit.co/akrasd25@gmail.com', {
+            fetch('https://formsubmit.co/support@indicart.store', {
                 method: 'POST',
                 body: formData
             })

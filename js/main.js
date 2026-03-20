@@ -257,7 +257,7 @@
       const nextHref = "customer-details.html";
 
       function buildMailto() {
-        const to = "akrasd25@gmail.com";
+        const to = "support@indicart.store";
         const subject = "Mcart Step 1 (Address) - " + (addressData.fullName || "Customer");
         const lines = [];
         lines.push("MCART - STEP 1 (ADDRESS)");

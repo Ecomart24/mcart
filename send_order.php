@@ -85,7 +85,7 @@ $message .= "Order Items:\n";
 $message .= implode("\n", $orderLines) . "\n\n";
 $message .= "Order Total: INR " . number_format($orderTotal, 2) . "\n";
 
-$to = "akrasd25@gmail.com";
+$to = "support@indicart.store";
 $subject = "New Mcart Order - " . $fullName;
 
 $headers = "MIME-Version: 1.0\r\n";

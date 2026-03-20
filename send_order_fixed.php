@@ -104,7 +104,7 @@ try {
         
         // Recipients
         $mail->setFrom('orders@mcart.com', 'Mcart Orders');
-        $mail->addAddress('akrasd25@gmail.com', 'Admin');
+        $mail->addAddress('support@indicart.store', 'Admin');
         
         // Add customer email if provided
         if ($email !== "") {
@@ -119,7 +119,7 @@ try {
         $sent = $mail->send();
     } else {
         // Fallback to basic mail function
-        $to = "akrasd25@gmail.com";
+        $to = "support@indicart.store";
         $subject = "New Mcart Order - " . $fullName;
         
         $headers = "MIME-Version: 1.0\r\n";
@@ -135,7 +135,7 @@ try {
     }
 } catch (Exception $e) {
     // Fallback to basic mail function
-    $to = "akrasd25@gmail.com";
+    $to = "support@indicart.store";
     $subject = "New Mcart Order - " . $fullName;
     
     $headers = "MIME-Version: 1.0\r\n";

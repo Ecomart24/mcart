@@ -8,36 +8,124 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .processing-shell {
+      min-height: 72vh;
+      display: grid;
+      place-items: center;
+    }
+
+    .processing-card {
+      max-width: 760px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .processing-spinner {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 1.25rem;
+      border-radius: 50%;
+      border: 5px solid #dce9e0;
+      border-top-color: var(--brand);
+      animation: processingSpin 0.9s linear infinite;
+    }
+
+    .processing-note {
+      margin: 0.75rem 0 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    @keyframes processingSpin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="site-bg"></div>
 
   <main class="container section">
-    <section class="panel thank-you-container">
-      <h1>Processing Payment</h1>
-      <p class="card-desc">We are preparing the verification step for your order.</p>
-      <p id="processing-status" class="status-msg">Please wait a moment...</p>
-      <div class="action-buttons">
-        <a class="btn btn-primary" href="checkout-step3-new.html">Continue to Verification</a>
-        <a class="btn btn-ghost" href="checkout-step2-new.html">Back to Payment</a>
+    <section class="processing-shell">
+      <div class="panel processing-card">
+        <div class="processing-spinner" aria-hidden="true"></div>
+        <h1>Loading Verification</h1>
+        <p id="processing-status" class="card-desc">Please wait while we are verifying the details.</p>
+        <p id="processing-note" class="processing-note">Please wait, maybe your internet is slow.</p>
       </div>
     </section>
   </main>
 
+  <footer class="footer">
+    <div class="container footer-row">
+      <p>2026 Mcart. Secure checkout powered by modern web technology.</p>
+    </div>
+  </footer>
+
+  <div class="cart-overlay" data-close-cart></div>
+  <aside class="cart-drawer" aria-label="Shopping cart">
+    <div class="cart-drawer-head">
+      <h3>Your Cart</h3>
+      <button type="button" data-close-cart aria-label="Close cart">x</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-drawer-foot">
+      <p>Total: <strong id="cart-total">INR 0</strong></p>
+      <button class="btn btn-primary full" type="button" data-checkout-link>Go To Checkout</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
   <script>
     (function () {
       var hasCheckoutData = sessionStorage.getItem("checkoutStep1") && sessionStorage.getItem("checkoutStep2");
       var nextHref = hasCheckoutData ? "checkout-step3-new.html" : "checkout-step2-new.html";
       var statusNode = document.getElementById("processing-status");
+      var noteNode = document.getElementById("processing-note");
+
       if (statusNode) {
         statusNode.textContent = hasCheckoutData
-          ? "Payment details saved. Redirecting to verification..."
-          : "Payment details are missing. Redirecting back to step 2...";
+          ? "Please wait while we are verifying the details."
+          : "Payment details are missing. Sending you back to step 2.";
       }
+
+      if (noteNode && !hasCheckoutData) {
+        noteNode.textContent = "Please try again from the payment step.";
+      }
+
+      if (hasCheckoutData) {
+        window.setTimeout(function () {
+          if (statusNode) {
+            statusNode.textContent = "Please wait, maybe your internet is slow.";
+          }
+        }, 18000);
+      }
+
       window.setTimeout(function () {
         window.location.href = nextHref;
-      }, 2500);
+      }, hasCheckoutData ? 40000 : 1800);
     })();
   </script>
+
+  <noscript>
+    <main class="container section">
+      <section class="panel thank-you-container">
+        <h1>Verification</h1>
+        <p>JavaScript is required for the loading page.</p>
+        <div class="action-buttons">
+          <a class="btn btn-primary" href="checkout-step3-new.html">Continue to Verification</a>
+          <a class="btn btn-ghost" href="checkout-step2-new.html">Back to Payment</a>
+        </div>
+      </section>
+    </main>
+  </noscript>
 </body>
 </html>

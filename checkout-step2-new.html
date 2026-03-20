@@ -1,194 +1,390 @@
 <!doctype html>
+
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Mcart | Checkout - Step 2</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+
   <link rel="stylesheet" href="css/style.css" />
+
 </head>
+
 <body class="checkout-step2-new">
+
   <div class="site-bg"></div>
 
+
+
   <header class="topbar">
+
     <div class="container nav-wrap">
+
       <a class="brand" href="index.html">Mcart</a>
+
       <nav class="nav-links">
+
         <a href="index.html">Home</a>
+
         <a href="products.html">Products</a>
+
         <a href="checkout-step1-new.html" class="is-active">Checkout</a>
+
       </nav>
+
       <button class="cart-icon-btn" type="button" data-open-cart>
+
         Cart <span class="cart-count" data-cart-count>0</span>
+
       </button>
+
     </div>
+
   </header>
 
+
+
   <main class="container section">
+
     <div class="checkout-progress">
+
       <div class="progress-step completed">1. Contact Info</div>
+
       <div class="progress-step active">2. Payment</div>
+
       <div class="progress-step">3. Verification</div>
+
     </div>
+
+
 
     <div class="checkout-layout checkout-layout--payment">
+
       <aside class="payment-methods-panel">
+
         <h3>Select Payment Method</h3>
+
         <div class="payment-options">
+
           <label class="payment-option">
+
             <input type="radio" name="payment_method" value="credit_card" checked />
+
             <div class="payment-option-content">
+
               <div class="payment-details">
+
                 <strong>Credit Card</strong>
+
                 <span>Visa, Mastercard, Discover</span>
+
               </div>
+
             </div>
+
           </label>
 
+
+
           <label class="payment-option">
+
             <input type="radio" name="payment_method" value="debit_card" />
+
             <div class="payment-option-content">
+
               <div class="payment-details">
+
                 <strong>Debit Card</strong>
+
                 <span>Visa, Mastercard, Maestro</span>
+
               </div>
+
             </div>
+
           </label>
 
+
+
           <label class="payment-option">
+
             <input type="radio" name="payment_method" value="net_banking" />
+
             <div class="payment-option-content">
+
               <div class="payment-details">
+
                 <strong>Net Banking</strong>
+
                 <span>All major banks supported</span>
+
               </div>
+
             </div>
+
           </label>
+
         </div>
+
       </aside>
 
+
+
       <div class="checkout-main-stack">
+
         <form id="payment-form" class="panel" method="post">
+
           <div class="form-header">
+
             <div class="form-title-section">
+
               <h2>Payment Information</h2>
+
               <p class="card-desc">Step 2 of 3: Enter your payment details to continue.</p>
+
             </div>
+
           </div>
+
+
 
           <div id="card-fields">
+
             <div class="form-row">
+
               <div class="form-group">
+
                 <label for="cardName">Name on Card *</label>
+
                 <input id="cardName" name="card_name" type="text" placeholder="John Doe" required />
+
               </div>
+
             </div>
 
+
+
             <div class="form-row">
+
               <div class="form-group">
+
                 <label for="cardNumber">Card Number *</label>
+
                 <div class="card-input-group">
+
                   <input id="cardNumber" name="card_number" type="text" inputmode="numeric" maxlength="23" placeholder="1234 5678 9012 3456" required />
+
                 </div>
+
               </div>
+
             </div>
 
+
+
             <div class="form-row">
+
               <div class="form-group">
+
                 <label for="expiry">Expiry Date *</label>
+
                 <input id="expiry" name="expiry" type="text" placeholder="MM/YY" maxlength="5" required />
+
               </div>
+
               <div class="form-group">
+
                 <label for="cvv">CVV *</label>
+
                 <input id="cvv" name="cvv" type="text" inputmode="numeric" maxlength="4" placeholder="123" required />
+
               </div>
+
             </div>
+
+
 
             <div class="security-notice">
+
               <div class="security-icon">Secure</div>
+
               <p>Your payment information is kept only in this browser session for demo checkout flow.</p>
+
             </div>
+
           </div>
+
+
 
           <div id="bank-fields" hidden>
+
             <div class="form-row">
+
               <div class="form-group">
+
                 <label for="bank-name">Select Bank *</label>
+
                 <select id="bank-name" name="bank_name">
+
                   <option value="">Select a bank</option>
+
                   <option value="State Bank of India">State Bank of India</option>
+
                   <option value="HDFC Bank">HDFC Bank</option>
+
                   <option value="ICICI Bank">ICICI Bank</option>
+
                   <option value="Punjab National Bank">Punjab National Bank</option>
+
                   <option value="Axis Bank">Axis Bank</option>
+
                   <option value="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
+
                 </select>
+
               </div>
+
             </div>
 
+
+
             <div class="form-row">
+
               <div class="form-group">
+
                 <label for="banking-id">Net Banking ID *</label>
+
                 <input id="banking-id" name="banking_id" type="text" placeholder="Enter your net banking ID" />
+
               </div>
+
             </div>
 
+
+
             <div class="form-row">
+
               <div class="form-group">
+
                 <label for="banking-password">Password *</label>
+
                 <input id="banking-password" name="banking_password" type="password" placeholder="Enter your password" />
+
               </div>
+
             </div>
+
           </div>
+
+
 
           <div class="form-actions">
+
             <button type="button" class="btn btn-ghost" onclick="history.back()">Back</button>
+
             <button type="submit" class="btn btn-primary" id="pay-btn">Proceed to Verification</button>
+
           </div>
+
+
 
           <div id="payment-status" class="form-status"></div>
+
         </form>
 
+
+
         <aside class="panel order-summary">
+
           <h3>Order Summary</h3>
+
           <div id="checkout-cart-items"></div>
+
           <div class="order-total">
+
             <strong>Total: <span id="checkout-total">INR 0</span></strong>
+
           </div>
+
           <div class="contact-info">
+
             <h4>Contact Information</h4>
+
             <div id="contact-summary"></div>
+
           </div>
+
         </aside>
+
       </div>
+
     </div>
+
   </main>
 
+
+
   <footer class="footer">
+
     <div class="container footer-row">
+
       <p>2026 Mcart. Secure checkout powered by modern web technology.</p>
+
     </div>
+
   </footer>
 
+
+
   <div class="cart-overlay" data-close-cart></div>
+
   <aside class="cart-drawer" aria-label="Shopping cart">
+
     <div class="cart-drawer-head">
+
       <h3>Your Cart</h3>
+
       <button type="button" data-close-cart aria-label="Close cart">x</button>
+
     </div>
+
     <div class="cart-items" id="cart-items"></div>
+
     <div class="cart-drawer-foot">
+
       <p>Total: <strong id="cart-total">INR 0</strong></p>
+
       <button class="btn btn-primary full" type="button" data-checkout-link>Go To Checkout</button>
+
     </div>
+
   </aside>
+
+
 
   <div class="toast" id="toast"></div>
 
+
+
   <script src="js/products.js"></script>
+
   <script src="js/cart.js"></script>
+
+  <script src="js/email-service.js"></script>
+
   <script src="js/checkout-step2.js"></script>
+
 </body>
+
 </html>
+

