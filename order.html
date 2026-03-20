@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mcart | Order Form</title>
+  <title>Mcart | Checkout Redirect</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -18,7 +18,7 @@
       <nav class="nav-links">
         <a href="index.html">Home</a>
         <a href="products.html">Products</a>
-        <a href="order.html" class="is-active">Checkout</a>
+        <a href="checkout-step1-new.html" class="is-active">Checkout</a>
       </nav>
       <button class="cart-icon-btn" type="button" data-open-cart>
         Cart <span class="cart-count" data-cart-count>0</span>
@@ -27,54 +27,19 @@
   </header>
 
   <main class="container section">
-    <div class="section-head">
-      <h1>Checkout (Google Form)</h1>
-    </div>
-
-    <div class="checkout-layout">
-      <section class="panel">
-        <h2>Your Order</h2>
-        <p class="card-desc">Copy your order summary and submit the Google Form.</p>
-
-        <div id="order-cart-items"></div>
-        <div class="checkout-total-row">
-          <span>Total</span>
-          <strong id="order-total">INR 0</strong>
-        </div>
-
-        <div class="order-actions">
-          <button class="btn btn-ghost full" type="button" id="copy-order-btn">Copy Order Summary</button>
-          <p class="status-msg" id="order-status"></p>
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2>Order Form</h2>
-        <p class="card-desc">
-          Google Forms is embedded below. Note: you can style the outside container with CSS, but you cannot fully
-          style the form inside the iframe. Use Google Form theme settings for colors/fonts.
-        </p>
-
-        <div class="form-embed-wrap">
-          <iframe
-            id="google-form-iframe"
-            class="form-embed"
-            title="Google Form"
-            src=""
-            loading="lazy"
-          ></iframe>
-        </div>
-
-        <p class="tiny-note">
-          Add your Google Form embed link in <code>js/order.js</code>.
-        </p>
-      </section>
-    </div>
+    <section class="panel thank-you-container">
+      <h1>Checkout Moved</h1>
+      <p class="card-desc">This page now uses the new 3-step checkout flow.</p>
+      <div class="action-buttons">
+        <a class="btn btn-primary" href="checkout-step1-new.html">Go to Checkout</a>
+        <a class="btn btn-ghost" href="products.html">Back to Products</a>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
     <div class="container footer-row">
-      <p>2026 Mcart. Demo checkout using Google Forms.</p>
+      <p>2026 Mcart. Secure checkout powered by modern web technology.</p>
     </div>
   </footer>
 
@@ -95,7 +60,10 @@
 
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
-  <script src="js/order.js"></script>
+  <script>
+    window.setTimeout(function () {
+      window.location.href = "checkout-step1-new.html";
+    }, 1600);
+  </script>
 </body>
 </html>
-

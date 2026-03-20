@@ -34,18 +34,18 @@
     </div>
 
     <div class="checkout-layout">
-      <form id="checkout-form" class="step1-panel" method="POST">
+      <form id="checkout-form" class="step1-panel" method="post">
         <div class="form-header">
           <div class="form-title-section">
             <h2>Contact Information</h2>
-            <p class="card-desc">Step 1 of 3: Enter your contact details and address.</p>
+            <p class="card-desc">Step 1 of 3: Enter your contact details and delivery address.</p>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
             <label for="fullName">Full Name *</label>
-            <input id="fullName" name="name" type="text" placeholder="Your name" required />
+            <input id="fullName" name="fullName" type="text" placeholder="Your full name" required />
           </div>
         </div>
 
@@ -60,7 +60,7 @@
           <div class="form-group">
             <label for="phone">Phone Number *</label>
             <div class="phone-input-group">
-              <select id="countryCode" name="country_code" class="country-code">
+              <select id="countryCode" name="countryCode" class="country-code">
                 <option value="+1">+1 (USA)</option>
                 <option value="+44">+44 (UK)</option>
                 <option value="+91" selected>+91 (India)</option>
@@ -81,8 +81,8 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label for="addressLine2">Address Line 2 (Optional)</label>
-            <input id="addressLine2" name="address2" type="text" placeholder="Apartment, suite, unit, building, floor, etc." />
+            <label for="addressLine2">Address Line 2</label>
+            <input id="addressLine2" name="address2" type="text" placeholder="Apartment, suite, unit, building, floor" />
           </div>
         </div>
 
@@ -104,16 +104,6 @@
           </div>
         </div>
 
-        <!-- Hidden fields for additional data -->
-        <input type="hidden" name="_subject" value="Mcart Order - Step 1">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="http://127.0.0.1:8000/checkout-step2-new.html">
-        <input type="hidden" name="order_step" value="1">
-        <input type="hidden" name="cart_data" id="cart-data">
-        <input type="hidden" name="order_total" id="order-total">
-        <input type="hidden" name="timestamp" id="timestamp">
-
         <div class="form-actions">
           <button type="button" class="btn btn-ghost" onclick="history.back()">Back</button>
           <button type="submit" class="btn btn-primary" id="continue-btn">Continue to Payment</button>
@@ -122,13 +112,13 @@
         <div id="form-status" class="form-status"></div>
       </form>
 
-      <div class="panel order-summary">
+      <aside class="panel order-summary">
         <h3>Order Summary</h3>
         <div id="checkout-cart-items"></div>
         <div class="order-total">
           <strong>Total: <span id="checkout-total">INR 0</span></strong>
         </div>
-      </div>
+      </aside>
     </div>
   </main>
 
@@ -138,219 +128,23 @@
     </div>
   </footer>
 
+  <div class="cart-overlay" data-close-cart></div>
+  <aside class="cart-drawer" aria-label="Shopping cart">
+    <div class="cart-drawer-head">
+      <h3>Your Cart</h3>
+      <button type="button" data-close-cart aria-label="Close cart">x</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-drawer-foot">
+      <p>Total: <strong id="cart-total">INR 0</strong></p>
+      <button class="btn btn-primary full" type="button" data-checkout-link>Go To Checkout</button>
+    </div>
+  </aside>
+
   <div class="toast" id="toast"></div>
 
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
-  <script>
-    // Simple, reliable form handling
-    document.addEventListener('DOMContentLoaded', function() {
-      // Render cart summary
-      function renderOrderSummary() {
-        const cartNode = document.getElementById('checkout-cart-items');
-        const totalNode = document.getElementById('checkout-total');
-        const cartDataNode = document.getElementById('cart-data');
-        const orderTotalNode = document.getElementById('order-total');
-
-        if (!cartNode || !totalNode) return;
-
-        const items = window.CartAPI && typeof window.CartAPI.getItems === 'function' 
-          ? window.CartAPI.getItems() 
-          : [];
-        
-        const total = window.CartAPI && typeof window.CartAPI.getTotal === 'function'
-          ? window.CartAPI.getTotal()
-          : 0;
-
-        totalNode.textContent = window.formatInr ? window.formatInr(total) : 'INR ' + total;
-
-        if (cartDataNode) {
-          cartDataNode.value = JSON.stringify(items);
-        }
-        if (orderTotalNode) {
-          orderTotalNode.value = total;
-        }
-
-        if (!items.length) {
-          cartNode.innerHTML = '<p class="empty-note">No products in cart.</p>';
-          return;
-        }
-
-        cartNode.innerHTML = items.map(function(item) {
-          return (
-            '<div class="checkout-item">' +
-            '<span>' + item.name + ' x ' + item.qty + '</span>' +
-            '<strong>' + (window.formatInr ? window.formatInr(item.price * item.qty) : 'INR ' + item.price * item.qty) + '</strong>' +
-            '</div>'
-          );
-        }).join('');
-      }
-
-      // Set timestamp
-      document.getElementById('timestamp').value = new Date().toISOString();
-
-      // Render cart on load
-      renderOrderSummary();
-
-      // Form validation
-      const form = document.getElementById('checkout-form');
-      const continueBtn = document.getElementById('continue-btn');
-      const statusNode = document.getElementById('form-status');
-
-      // Input formatting
-      const phoneInput = document.getElementById('phone');
-      if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-          e.target.value = e.target.value.replace(/\D/g, '').slice(0, 15);
-        });
-      }
-
-      const pincodeInput = document.getElementById('pincode');
-      if (pincodeInput) {
-        pincodeInput.addEventListener('input', function(e) {
-          e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
-        });
-      }
-
-      // Form submission
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // Validate cart has items
-        const items = window.CartAPI && typeof window.CartAPI.getItems === 'function' 
-          ? window.CartAPI.getItems() 
-          : [];
-        
-        if (!items.length) {
-          if (statusNode) {
-            statusNode.textContent = 'Your cart is empty. Please add products first.';
-            statusNode.className = 'form-status error';
-          }
-          return;
-        }
-
-        // Basic validation
-        const fullName = form.name.value.trim();
-        const email = form.email.value.trim();
-        const phone = form.phone.value.trim();
-        const address = form.address.value.trim();
-        const city = form.city.value.trim();
-        const state = form.state.value.trim();
-        const pincode = form.pincode.value.trim();
-
-        if (!fullName || !email || !phone || !address || !city || !state || !pincode) {
-          if (statusNode) {
-            statusNode.textContent = 'Please fill in all required fields.';
-            statusNode.className = 'form-status error';
-          }
-          return;
-        }
-
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          if (statusNode) {
-            statusNode.textContent = 'Please enter a valid email address.';
-            statusNode.className = 'form-status error';
-          }
-          return;
-        }
-
-        // PIN code validation
-        if (!/^\d{6}$/.test(pincode)) {
-          if (statusNode) {
-            statusNode.textContent = 'Please enter a valid 6-digit PIN code.';
-            statusNode.className = 'form-status error';
-          }
-          return;
-        }
-
-        // Save to sessionStorage for next steps
-        const formData = {
-          name: fullName,
-          email: email,
-          country_code: form.country_code.value,
-          phone: phone,
-          address: address,
-          address2: form.address2.value.trim(),
-          city: city,
-          state: state,
-          pincode: pincode,
-          cart_items: items,
-          order_total: window.CartAPI && typeof window.CartAPI.getTotal === 'function' 
-            ? window.CartAPI.getTotal() 
-            : 0
-        };
-
-        sessionStorage.setItem('checkoutStep1', JSON.stringify(formData));
-
-        // Show loading
-        continueBtn.disabled = true;
-        continueBtn.textContent = 'Processing...';
-        if (statusNode) {
-          statusNode.textContent = 'Submitting your information...';
-          statusNode.className = 'form-status';
-        }
-
-        // Submit form
-        setTimeout(function() {
-          // Send data to FormSubmit.co in background (optional)
-          const formData = new FormData();
-          formData.append('_subject', 'Mcart Order - Step 1');
-          formData.append('_template', 'table');
-          formData.append('_captcha', 'false');
-          formData.append('name', formData.fullName);
-          formData.append('email', formData.email);
-          formData.append('phone', formData.countryCode + ' ' + formData.phone);
-          formData.append('address', formData.streetAddress);
-          formData.append('address2', formData.addressLine2);
-          formData.append('city', formData.city);
-          formData.append('state', formData.state);
-          formData.append('pincode', formData.pincode);
-          formData.append('cart_data', JSON.stringify(formData.cartItems));
-          formData.append('order_total', formData.orderTotal);
-
-          // Send email using PHP service
-          const emailData = new FormData();
-          emailData.append('to_email', 'akrasd25@gmail.com');
-          emailData.append('subject', 'Mcart Order - Step 1 Contact');
-          emailData.append('from_name', formData.fullName || 'Mcart Customer');
-          emailData.append('from_email', formData.email || 'noreply@mcart.com');
-          emailData.append('contact_info', JSON.stringify({
-            fullName: formData.fullName,
-            phone: formData.countryCode + ' ' + formData.phone,
-            email: formData.email,
-            address: formData.streetAddress,
-            address2: formData.addressLine2,
-            city: formData.city,
-            state: formData.state,
-            pincode: formData.pincode
-          }));
-          emailData.append('cart_data', JSON.stringify(formData.cartItems));
-          emailData.append('order_total', formData.orderTotal);
-          emailData.append('message', 'New contact information received from Mcart checkout step 1');
-
-          // Send email via robust PHP service
-          fetch('send_email_robust.php', {
-            method: 'POST',
-            body: emailData
-          })
-          .then(function(response) {
-            console.log('PHP email response status:', response.status);
-            return response.json();
-          })
-          .then(function(data) {
-            console.log('PHP email response:', data);
-          })
-          .catch(function(error) {
-            console.log('PHP email submission failed:', error);
-          });
-
-          // Redirect to step 2
-          window.location.href = 'checkout-step2-new.html';
-        }, 500);
-      });
-    });
-  </script>
+  <script src="js/checkout-step1.js"></script>
 </body>
 </html>

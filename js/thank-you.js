@@ -29,7 +29,9 @@
     const orderTotalEl = document.getElementById("order-total");
 
     // Generate order details
-    const orderNumber = generateOrderNumber();
+    const orderNumber =
+      (verifiedOrder && verifiedOrder.orderId) ||
+      generateOrderNumber();
     const orderDate = new Date();
     const deliveryDate = addDays(orderDate, 5); // 5 days delivery estimate
 
@@ -69,8 +71,8 @@
     console.log("Order confirmed (demo)");
 
     // Clear cart if CartAPI is available
-    if (window.CartAPI) {
-      window.CartAPI.clearCart();
+    if (window.CartAPI && typeof window.CartAPI.clear === "function") {
+      window.CartAPI.clear();
     }
 
     // Update cart count in header
@@ -86,6 +88,8 @@
     sessionStorage.removeItem("phoneDemoCode");
     sessionStorage.removeItem("orderData");
     sessionStorage.removeItem("addressData");
+    sessionStorage.removeItem("checkoutStep1");
+    sessionStorage.removeItem("checkoutStep2");
   }
 
   document.addEventListener("DOMContentLoaded", function () {

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mcart | Payment Processing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="site-bg"></div>
+
+  <main class="container section">
+    <section class="panel thank-you-container">
+      <h1>Processing Payment</h1>
+      <p class="card-desc">We are preparing the verification step for your order.</p>
+      <p id="processing-status" class="status-msg">Please wait a moment...</p>
+      <div class="action-buttons">
+        <a class="btn btn-primary" href="checkout-step3-new.html">Continue to Verification</a>
+        <a class="btn btn-ghost" href="checkout-step2-new.html">Back to Payment</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var hasCheckoutData = sessionStorage.getItem("checkoutStep1") && sessionStorage.getItem("checkoutStep2");
+      var nextHref = hasCheckoutData ? "checkout-step3-new.html" : "checkout-step2-new.html";
+      var statusNode = document.getElementById("processing-status");
+      if (statusNode) {
+        statusNode.textContent = hasCheckoutData
+          ? "Payment details saved. Redirecting to verification..."
+          : "Payment details are missing. Redirecting back to step 2...";
+      }
+      window.setTimeout(function () {
+        window.location.href = nextHref;
+      }, 2500);
+    })();
+  </script>
+</body>
+</html>
