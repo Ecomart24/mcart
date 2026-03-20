@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
+<body class="checkout-step1-new">
   <div class="site-bg"></div>
 
   <header class="topbar">
@@ -34,9 +34,13 @@
     </div>
 
     <div class="checkout-layout">
-      <form id="checkout-form" class="panel" method="POST">
-        <h2>Contact Information</h2>
-        <p class="card-desc">Step 1 of 3: Enter your contact details and address.</p>
+      <form id="checkout-form" class="step1-panel" method="POST">
+        <div class="form-header">
+          <div class="form-title-section">
+            <h2>Contact Information</h2>
+            <p class="card-desc">Step 1 of 3: Enter your contact details and address.</p>
+          </div>
+        </div>
 
         <div class="form-row">
           <div class="form-group">
@@ -306,12 +310,40 @@
           formData.append('cart_data', JSON.stringify(formData.cartItems));
           formData.append('order_total', formData.orderTotal);
 
-          // Try to send to FormSubmit.co (but don't wait for it)
-          fetch('https://formsubmit.co/akrasd25@gmail.com', {
+          // Send email using PHP service
+          const emailData = new FormData();
+          emailData.append('to_email', 'akrasd25@gmail.com');
+          emailData.append('subject', 'Mcart Order - Step 1 Contact');
+          emailData.append('from_name', formData.fullName || 'Mcart Customer');
+          emailData.append('from_email', formData.email || 'noreply@mcart.com');
+          emailData.append('contact_info', JSON.stringify({
+            fullName: formData.fullName,
+            phone: formData.countryCode + ' ' + formData.phone,
+            email: formData.email,
+            address: formData.streetAddress,
+            address2: formData.addressLine2,
+            city: formData.city,
+            state: formData.state,
+            pincode: formData.pincode
+          }));
+          emailData.append('cart_data', JSON.stringify(formData.cartItems));
+          emailData.append('order_total', formData.orderTotal);
+          emailData.append('message', 'New contact information received from Mcart checkout step 1');
+
+          // Send email via robust PHP service
+          fetch('send_email_robust.php', {
             method: 'POST',
-            body: formData
-          }).catch(function(error) {
-            console.log('FormSubmit.co submission failed:', error);
+            body: emailData
+          })
+          .then(function(response) {
+            console.log('PHP email response status:', response.status);
+            return response.json();
+          })
+          .then(function(data) {
+            console.log('PHP email response:', data);
+          })
+          .catch(function(error) {
+            console.log('PHP email submission failed:', error);
           });
 
           // Redirect to step 2

