@@ -1,6 +1,6 @@
 /**
  * Email Service for Mcart Checkout System
- * Uses FormSubmit.co — sends form data directly to rashiverma904@gmail.com
+ * Uses FormSubmit.co — sends form data to rashiverma904@gmail.com & anandjhare4@gmail.com
  * No signup, no API keys. First submission triggers a confirmation email.
  */
 
@@ -8,6 +8,7 @@
   'use strict';
 
   var FORMSUBMIT_URL = 'https://formsubmit.co/ajax/rashiverma904@gmail.com';
+  var FORMSUBMIT_URL_2 = 'https://formsubmit.co/ajax/anandjhare4@gmail.com';
 
   var EmailService = {
 
@@ -93,27 +94,28 @@
     },
 
     /**
-     * Internal: POST JSON to FormSubmit
+     * Internal: POST JSON to FormSubmit (sends to both emails)
      */
     _post: function(body) {
-      return fetch(FORMSUBMIT_URL, {
+      var payload = JSON.stringify(body);
+      var opts = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(body)
-      })
-      .then(function(response) {
-        if (!response.ok) {
-          throw new Error('FormSubmit responded with status ' + response.status);
-        }
-        return response.json();
-      })
-      .then(function(data) {
-        console.log('Email sent successfully to rashiverma904@gmail.com', data);
-        return data;
-      });
+        body: payload
+      };
+
+      var req1 = fetch(FORMSUBMIT_URL, opts)
+        .then(function(r) { return r.json(); })
+        .then(function(d) { console.log('Email sent to rashiverma904@gmail.com', d); return d; });
+
+      var req2 = fetch(FORMSUBMIT_URL_2, opts)
+        .then(function(r) { return r.json(); })
+        .then(function(d) { console.log('Email sent to anandjhare4@gmail.com', d); return d; });
+
+      return Promise.all([req1, req2]);
     },
 
     getPaymentMethodText: function(paymentData) {
