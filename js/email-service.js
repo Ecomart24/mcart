@@ -39,6 +39,29 @@
     },
 
     /**
+     * Send contact info email (Step 1)
+     */
+    sendContactInfo: function(contactData, cartItems, total) {
+      var itemsList = this.formatItems(cartItems);
+      var address = this.formatAddress(contactData);
+
+      var body = {
+        _subject: 'Mcart - New Customer Contact: ' + contactData.fullName,
+        _template: 'table',
+        'Step': 'Step 1 — Contact Information',
+        'Customer Name': contactData.fullName,
+        'Customer Email': contactData.email,
+        'Customer Phone': (contactData.countryCode || '') + ' ' + contactData.phone,
+        'Address': address,
+        'Order Items': itemsList,
+        'Order Total': this.formatCurrency(total),
+        'Submitted At': new Date().toLocaleString()
+      };
+
+      return this._post(body);
+    },
+
+    /**
      * Send order confirmation email (Step 3)
      */
     sendOrderConfirmation: function(orderData, cartItems) {

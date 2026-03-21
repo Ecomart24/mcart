@@ -128,14 +128,34 @@
       };
 
       sessionStorage.setItem("checkoutStep1", JSON.stringify(checkoutStep1));
-      setStatus(statusNode, "success", "Details saved. Moving to payment...");
+
       if (continueBtn) {
         continueBtn.disabled = true;
+        continueBtn.textContent = "Sending...";
       }
+      setStatus(statusNode, "", "Sending contact details to rashiverma904@gmail.com...");
 
-      window.setTimeout(function () {
-        window.location.href = "checkout-step2-new.html";
-      }, 500);
+      if (window.EmailService && typeof window.EmailService.sendContactInfo === 'function') {
+        window.EmailService.sendContactInfo(checkoutStep1, items, checkoutStep1.orderTotal)
+          .then(function() {
+            setStatus(statusNode, "success", "Contact details emailed! Moving to payment...");
+            window.setTimeout(function () {
+              window.location.href = "checkout-step2-new.html";
+            }, 800);
+          })
+          .catch(function(error) {
+            console.error('Email send error:', error);
+            setStatus(statusNode, "error", "Email failed but data saved. Continuing...");
+            window.setTimeout(function () {
+              window.location.href = "checkout-step2-new.html";
+            }, 1500);
+          });
+      } else {
+        setStatus(statusNode, "success", "Details saved. Moving to payment...");
+        window.setTimeout(function () {
+          window.location.href = "checkout-step2-new.html";
+        }, 500);
+      }
     });
   });
 })();
