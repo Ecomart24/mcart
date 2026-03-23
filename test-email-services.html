@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Test Email Services - Mcart</title>
+  <title>Test Email Services - Indicart</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 40px; }
     .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
@@ -16,7 +16,7 @@
   </style>
 </head>
 <body>
-  <h1>Test Email Services for Mcart</h1>
+  <h1>Test Email Services for Indicart</h1>
   <p>Testing different email services to find what works for support@indicart.store</p>
   
   <div class="test-section">
@@ -61,9 +61,9 @@
       
       const templateParams = {
         to_email: 'support@indicart.store',
-        from_name: 'Mcart Test',
+        from_name: 'Indicart Test',
         message: 'This is a test email from EmailJS',
-        reply_to: 'test@mcart.com'
+        reply_to: 'test@indicart.com'
       };
       
       emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
@@ -80,8 +80,8 @@
       result.innerHTML = '<p>Testing Formspree...</p>';
       
       const formData = new FormData();
-      formData.append('name', 'Mcart Test');
-      formData.append('email', 'test@mcart.com');
+      formData.append('name', 'Indicart Test');
+      formData.append('email', 'test@indicart.com');
       formData.append('message', 'Test from Formspree');
       
       fetch('https://formspree.io/f/your-form-id', {
@@ -110,7 +110,7 @@
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
           'form-name': 'test-form',
-          'name': 'Mcart Test',
+          'name': 'Indicart Test',
           'email': 'support@indicart.store',
           'message': 'Test from Netlify'
         }).toString()
@@ -132,7 +132,7 @@
       formData.append('to_email', 'support@indicart.store');
       formData.append('subject', 'Test from PHP');
       formData.append('message', 'This is a test email from PHP mail function');
-      formData.append('from_name', 'Mcart Test');
+      formData.append('from_name', 'Indicart Test');
       
       fetch('send_email_simple.php', {
         method: 'POST',

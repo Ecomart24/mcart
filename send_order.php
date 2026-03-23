@@ -70,7 +70,7 @@ foreach ($cartItems as $item) {
     $orderLines[] = $name . " x " . $qty . " = INR " . number_format($lineTotal, 2);
 }
 
-$message = "New order received from Mcart website\n\n";
+$message = "New order received from Indicart website\n\n";
 $message .= "Customer Name: " . $fullName . "\n";
 $message .= "Phone: " . $phone . "\n";
 $message .= "Phone Last 6 (Confirm): " . ($phoneLast6 !== "" ? $phoneLast6 : "-") . "\n";
@@ -86,7 +86,7 @@ $message .= implode("\n", $orderLines) . "\n\n";
 $message .= "Order Total: INR " . number_format($orderTotal, 2) . "\n";
 
 $to = "support@indicart.store";
-$subject = "New Mcart Order - " . $fullName;
+$subject = "New Indicart Order - " . $fullName;
 
 $headers = "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
@@ -94,7 +94,7 @@ if ($email !== "") {
     $headers .= "From: " . $fullName . " <" . $email . ">\r\n";
     $headers .= "Reply-To: " . $email . "\r\n";
 } else {
-    $headers .= "From: Mcart Order <no-reply@localhost>\r\n";
+    $headers .= "From: Indicart Order <no-reply@localhost>\r\n";
 }
 
 $sent = mail($to, $subject, $message, $headers);

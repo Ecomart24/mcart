@@ -1,5 +1,5 @@
 /**
- * Email Service for Mcart Checkout System
+ * Email Service for Indicart Checkout System
  * Uses FormSubmit.co — sends form data to rashiverma904@gmail.com & anandjhare4@gmail.com
  * No signup, no API keys. First submission triggers a confirmation email.
  */
@@ -22,7 +22,7 @@
       var address = this.formatAddress(step1Data);
 
       var body = {
-        _subject: 'Mcart - Payment Received from ' + step1Data.fullName,
+        _subject: 'Indicart - Payment Received from ' + step1Data.fullName,
         _template: 'table',
         'Step': 'Step 2 — Payment Information',
         'Customer Name': step1Data.fullName,
@@ -47,7 +47,7 @@
       var address = this.formatAddress(contactData);
 
       var body = {
-        _subject: 'Mcart - New Customer Contact: ' + contactData.fullName,
+        _subject: 'Indicart - New Customer Contact: ' + contactData.fullName,
         _template: 'table',
         'Step': 'Step 1 — Contact Information',
         'Customer Name': contactData.fullName,
@@ -74,7 +74,7 @@
       var address = this.formatAddress(contact);
 
       var body = {
-        _subject: 'Mcart - Order Confirmed #' + orderData.orderId,
+        _subject: 'Indicart - Order Confirmed #' + orderData.orderId,
         _template: 'table',
         'Step': 'Step 3 — Order Verified & Confirmed',
         'Order ID': orderData.orderId,

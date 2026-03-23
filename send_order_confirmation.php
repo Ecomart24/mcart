@@ -40,7 +40,7 @@ if ($orderNumber === "") {
     exit;
 }
 
-$message = "ORDER CONFIRMATION - Mcart\n\n";
+$message = "ORDER CONFIRMATION - Indicart\n\n";
 $message .= "========================================\n";
 $message .= "ORDER DETAILS\n";
 $message .= "========================================\n\n";
@@ -94,15 +94,15 @@ $message .= "If you have any questions about your order, please contact us:\n";
 $message .= "Email: support@mcart.com\n";
 $message .= "Phone: +1-800-MCART\n\n";
 
-$message .= "Thank you for choosing Mcart!\n";
+$message .= "Thank you for choosing Indicart!\n";
 $message .= "We appreciate your business and hope you enjoy your purchase.\n";
 
 $to = "support@indicart.store";
-$subject = "Order Confirmed - " . $orderNumber . " - Mcart";
+$subject = "Order Confirmed - " . $orderNumber . " - Indicart";
 
 $headers = "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-$headers .= "From: Mcart Orders <no-reply@localhost>\r\n";
+$headers .= "From: Indicart Orders <no-reply@localhost>\r\n";
 
 $sent = mail($to, $subject, $message, $headers);
 

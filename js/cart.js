@@ -1,5 +1,5 @@
 (function () {
-  const CART_KEY = "mcart_cart_v1";
+  const CART_KEY = "indicart_cart_v1";
   const cartDrawer = document.querySelector(".cart-drawer");
   const cartOverlay = document.querySelector(".cart-overlay");
   const cartItemsNode = document.getElementById("cart-items");
@@ -87,7 +87,7 @@
 
     const items = getItems();
     if (!items.length) {
-      cartItemsNode.innerHTML = '<p class="empty-note">Your cart is empty.</p>';
+      cartItemsNode.innerHTML = '<p class="empty-note">Your Indicart is empty.</p>';
     } else {
       cartItemsNode.innerHTML = items
         .map(function (item) {
@@ -145,7 +145,7 @@
 
     saveCart();
     renderCart();
-    showToast("Added to cart");
+    showToast("Added to Indicart");
   }
 
   function updateQty(id, delta) {

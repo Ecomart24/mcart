@@ -5,7 +5,7 @@
 
   function buildOrderSummary(items, total) {
     var lines = [];
-    lines.push("MCART ORDER SUMMARY");
+    lines.push("INDICART ORDER SUMMARY");
     lines.push("");
     (items || []).forEach(function (item) {
       var name = item && item.name ? item.name : "Product";
@@ -35,8 +35,8 @@
     totalNode.textContent = window.formatInr ? window.formatInr(total) : "INR " + total;
 
     if (!items.length) {
-      cartNode.innerHTML = '<p class="empty-note">No products in cart.</p>';
-      statusNode.textContent = "Add products to cart first.";
+      cartNode.innerHTML = '<p class="empty-note">No products in Indicart.</p>';
+      statusNode.textContent = "Add products to Indicart first.";
     } else {
       cartNode.innerHTML = items
         .map(function (item) {
@@ -64,7 +64,7 @@
     copyBtn.addEventListener("click", function () {
       var text = buildOrderSummary(items, total);
       if (!items.length) {
-        statusNode.textContent = "Your cart is empty.";
+        statusNode.textContent = "Your Indicart is empty.";
         return;
       }
 

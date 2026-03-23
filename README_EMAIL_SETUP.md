@@ -1,4 +1,4 @@
-# Email Setup for Mcart
+# Email Setup for Indicart
 
 ## Problem
 The current email system uses PHP's basic `mail()` function which often doesn't work on local development environments.
@@ -63,8 +63,8 @@ The current email system uses PHP's basic `mail()` function which often doesn't 
    // Create a simple test file test_email.php
    $to = "support@indicart.store";
    $subject = "Test Email";
-   $message = "This is a test email from Mcart.";
-   $headers = "From: test@mcart.com";
+   $message = "This is a test email from Indicart.";
+   $headers = "From: test@indicart.com";
    
    if (mail($to, $subject, $message, $headers)) {
        echo "Email sent successfully!";

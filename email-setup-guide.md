@@ -1,4 +1,4 @@
-# Email Service Setup Guide for Mcart
+# Email Service Setup Guide for Indicart
 
 Your checkout system now includes email functionality for steps 2 and 3! Here's how to configure it:
 
@@ -22,7 +22,7 @@ Your checkout system now includes email functionality for steps 2 and 3! Here's 
 
    **Payment Confirmation Template** (for Step 2):
    ```
-   Subject: Mcart - Payment Confirmation for {{to_name}}
+   Subject: Indicart - Payment Confirmation for {{to_name}}
    
    Hello {{to_name}},
    
@@ -46,12 +46,12 @@ Your checkout system now includes email functionality for steps 2 and 3! Here's 
    
    You will receive a final confirmation once your order is verified.
    
-   Thank you for shopping with Mcart!
+   Thank you for shopping with Indicart!
    ```
 
    **Order Confirmation Template** (for Step 3):
    ```
-   Subject: Mcart - Order Confirmed #{{order_id}}
+   Subject: Indicart - Order Confirmed #{{order_id}}
    
    Hello {{to_name}},
    
@@ -80,7 +80,7 @@ Your checkout system now includes email functionality for steps 2 and 3! Here's 
    
    Your order is now being processed and will be shipped soon.
    
-   Thank you for shopping with Mcart!
+   Thank you for shopping with Indicart!
    ```
 
 4. **Update Configuration**:

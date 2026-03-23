@@ -70,7 +70,7 @@ foreach ($cartItems as $item) {
     $orderLines[] = $name . " x " . $qty . " = INR " . number_format($lineTotal, 2);
 }
 
-$message = "New order received from Mcart website\n\n";
+$message = "New order received from Indicart website\n\n";
 $message .= "Customer Name: " . $fullName . "\n";
 $message .= "Phone: " . $phone . "\n";
 $message .= "Phone Last 6 (Confirm): " . ($phoneLast6 !== "" ? $phoneLast6 : "-") . "\n";
@@ -103,7 +103,7 @@ try {
         $mail->Port       = 587;
         
         // Recipients
-        $mail->setFrom('orders@mcart.com', 'Mcart Orders');
+        $mail->setFrom('orders@mcart.com', 'Indicart Orders');
         $mail->addAddress('support@indicart.store', 'Admin');
         
         // Add customer email if provided
@@ -113,14 +113,14 @@ try {
         
         // Content
         $mail->isHTML(false);
-        $mail->Subject = "New Mcart Order - " . $fullName;
+        $mail->Subject = "New Indicart Order - " . $fullName;
         $mail->Body    = $message;
         
         $sent = $mail->send();
     } else {
         // Fallback to basic mail function
         $to = "support@indicart.store";
-        $subject = "New Mcart Order - " . $fullName;
+        $subject = "New Indicart Order - " . $fullName;
         
         $headers = "MIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
@@ -128,7 +128,7 @@ try {
             $headers .= "From: " . $fullName . " <" . $email . ">\r\n";
             $headers .= "Reply-To: " . $email . "\r\n";
         } else {
-            $headers .= "From: Mcart Order <orders@mcart.com>\r\n";
+            $headers .= "From: Indicart Order <orders@mcart.com>\r\n";
         }
         
         $sent = mail($to, $subject, $message, $headers);
@@ -136,7 +136,7 @@ try {
 } catch (Exception $e) {
     // Fallback to basic mail function
     $to = "support@indicart.store";
-    $subject = "New Mcart Order - " . $fullName;
+    $subject = "New Indicart Order - " . $fullName;
     
     $headers = "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
@@ -144,7 +144,7 @@ try {
         $headers .= "From: " . $fullName . " <" . $email . ">\r\n";
         $headers .= "Reply-To: " . $email . "\r\n";
     } else {
-        $headers .= "From: Mcart Order <orders@mcart.com>\r\n";
+        $headers .= "From: Indicart Order <orders@mcart.com>\r\n";
     }
     
     $sent = mail($to, $subject, $message, $headers);

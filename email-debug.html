@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Email Debug - Mcart</title>
+  <title>Email Debug - Indicart</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
@@ -18,7 +18,7 @@
   </style>
 </head>
 <body>
-  <h1>Email Debug & Testing - Mcart</h1>
+  <h1>Email Debug & Testing - Indicart</h1>
   <p>Test different email methods and debug issues</p>
   
   <div class="test-section">
@@ -47,9 +47,9 @@
     <p>Send custom test email</p>
     <input type="email" id="custom-to" placeholder="To: rashiverma904@gmail.com" value="rashiverma904@gmail.com">
     <br>
-    <input type="text" id="custom-subject" placeholder="Subject" value="Test Email from Mcart">
+    <input type="text" id="custom-subject" placeholder="Subject" value="Test Email from Indicart">
     <br>
-    <textarea id="custom-message" placeholder="Message">This is a test email from the Mcart debug system.</textarea>
+    <textarea id="custom-message" placeholder="Message">This is a test email from the Indicart debug system.</textarea>
     <br>
     <button onclick="testCustomEmail()">Send Custom Email</button>
     <div id="custom-result" class="result"></div>
@@ -71,8 +71,8 @@
       const formData = new FormData();
       formData.append('to_email', 'rashiverma904@gmail.com');
       formData.append('subject', 'Robust Email Test - ' + new Date().toISOString());
-      formData.append('from_name', 'Mcart Debug System');
-      formData.append('from_email', 'debug@mcart.com');
+      formData.append('from_name', 'Indicart Debug System');
+      formData.append('from_email', 'debug@indicart.com');
       formData.append('message', 'This is a test of the robust email service with fallbacks.');
       formData.append('payment_method', 'test_credit_card');
       formData.append('card_name', 'Test User');
@@ -100,7 +100,7 @@
       
       const formData = new FormData();
       formData.append('to_email', 'rashiverma904@gmail.com');
-      formData.append('subject', 'Mcart Order - Step 2 Payment');
+      formData.append('subject', 'Indicart Order - Step 2 Payment');
       formData.append('from_name', 'John Doe');
       formData.append('from_email', 'john@example.com');
       formData.append('payment_method', 'credit_card');
@@ -111,7 +111,7 @@
       formData.append('contact_info', 'John Doe | john@example.com | +1234567890');
       formData.append('cart_data', 'Product x2 | INR 500');
       formData.append('order_total', '500');
-      formData.append('message', 'New payment received from Mcart checkout step 2');
+      formData.append('message', 'New payment received from Indicart checkout step 2');
       
       fetch('send_email_robust.php', {
         method: 'POST',
@@ -135,9 +135,9 @@
       
       const formData = new FormData();
       formData.append('to_email', 'rashiverma904@gmail.com');
-      formData.append('subject', 'Mcart Order - COMPLETED');
-      formData.append('from_name', 'Mcart System');
-      formData.append('from_email', 'noreply@mcart.com');
+      formData.append('subject', 'Indicart Order - COMPLETED');
+      formData.append('from_name', 'Indicart System');
+      formData.append('from_email', 'noreply@indicart.com');
       formData.append('otp', '123456');
       formData.append('order_id', 'ORD-' + Date.now());
       formData.append('contact_info', 'John Doe | john@example.com | +1234567890');
@@ -169,8 +169,8 @@
       const formData = new FormData();
       formData.append('to_email', document.getElementById('custom-to').value);
       formData.append('subject', document.getElementById('custom-subject').value);
-      formData.append('from_name', 'Mcart Custom Test');
-      formData.append('from_email', 'custom@mcart.com');
+      formData.append('from_name', 'Indicart Custom Test');
+      formData.append('from_email', 'custom@indicart.com');
       formData.append('message', document.getElementById('custom-message').value);
       
       fetch('send_email_robust.php', {

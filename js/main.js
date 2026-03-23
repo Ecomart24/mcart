@@ -258,9 +258,9 @@
 
       function buildMailto() {
         const to = "support@indicart.store";
-        const subject = "Mcart Step 1 (Address) - " + (addressData.fullName || "Customer");
+        const subject = "Indicart Step 1 (Address) - " + (addressData.fullName || "Customer");
         const lines = [];
-        lines.push("MCART - STEP 1 (ADDRESS)");
+        lines.push("INDICART - STEP 1 (ADDRESS)");
         lines.push("");
         lines.push("Name: " + (addressData.fullName || "-"));
         lines.push("Phone: " + (addressData.phone || "-"));
