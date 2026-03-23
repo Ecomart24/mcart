@@ -291,7 +291,7 @@
       id: "mens-ns-lycra-track-pants-combo",
       name: "Men's NS Lycra Track Pants Combo (Pack of 2)",
       category: "Track Pants",
-      price: 1099,
+      price: 150,
       oldPrice: 2260,
       short: "Stretchable slim fit Lycra track pants – perfect for gym, running & casual wear.",
       description: "Upgrade your daily wear with this premium combo of men's Lycra track pants. Designed for comfort, flexibility, and modern style — perfect for gym, running, or casual outings. Pack of 2, premium Lycra fabric, slim fit design with zipper pockets.",
