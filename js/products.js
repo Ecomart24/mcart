@@ -288,20 +288,21 @@
       ]
     },
     {
-      id: "mens-ns-lycra-track-pants-combo",
-      name: "Men's NS Lycra Track Pants Combo (Pack of 2)",
-      category: "Track Pants",
-      price: 150,
-      oldPrice: 2260,
-      short: "Stretchable slim fit Lycra track pants – perfect for gym, running & casual wear.",
-      description: "Upgrade your daily wear with this premium combo of men's Lycra track pants. Designed for comfort, flexibility, and modern style — perfect for gym, running, or casual outings. Pack of 2, premium Lycra fabric, slim fit design with zipper pockets.",
-      specs: ["Pack of 2", "Premium Lycra Fabric – Stretchable & Durable", "Slim Fit Design", "Zipper Pockets", "Breathable & Lightweight"],
+      id: "lycra-formal-trouser",
+      name: "Lycra Solid Slim Fit Mens Formal Trouser",
+      category: "Formal Trousers",
+      price: 250,
+      oldPrice: 2890,
+      short: "Slim fit Lycra formal trousers – multicolor solid for men.",
+      description: "Lycra Solid Slim Fit Mens Formal Trouser. Multicolor solid pattern, ideal for men. Lightweight at 600g.",
+      specs: ["Lycra Fabric", "Slim Fit", "Solid Pattern", "Multicolor"],
       featured: true,
-      image: "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/6565851992.jpg?v=1774277018",
+      image: "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/4711900066.jpg?v=1774277023",
       images: [
-        "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/6565851992.jpg?v=1774277018",
-        "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/6615778367.jpg?v=1774277018",
-        "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/4477194280.jpg?v=1774277018"
+        "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/4711900066.jpg?v=1774277023",
+        "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/6683133589.jpg?v=1774277023",
+        "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/4744164329.jpg?v=1774277023",
+        "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/5507698385.jpg?v=1774277023"
       ]
     }
   ];
