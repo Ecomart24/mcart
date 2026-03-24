@@ -288,6 +288,23 @@
       ]
     },
     {
+      id: "mens-ns-lycra-track-pants",
+      name: "Men's NS Lycra Track Pants – Stretchable Slim Fit Gym & Casual Wear",
+      category: "Track Pants",
+      price: 150,
+      oldPrice: 2260,
+      short: "Stretchable slim fit Lycra track pants – perfect for gym, running & casual wear.",
+      description: "Upgrade your daily wear with this premium men's Lycra track pants. Designed for comfort, flexibility, and modern style — perfect for gym, running, or casual outings. Premium Lycra fabric, slim fit design with zipper pockets.",
+      specs: ["Premium Lycra Fabric – Stretchable & Durable", "Slim Fit Design", "Zipper Pockets", "Breathable & Lightweight"],
+      featured: true,
+      image: "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/6565851992.jpg?v=1774277018",
+      images: [
+        "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/6565851992.jpg?v=1774277018",
+        "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/6615778367.jpg?v=1774277018",
+        "https://cdn.shopify.com/s/files/1/0698/0711/2362/files/4477194280.jpg?v=1774277018"
+      ]
+    },
+    {
       id: "lycra-formal-trouser",
       name: "Lycra Solid Slim Fit Mens Formal Trouser",
       category: "Formal Trousers",
